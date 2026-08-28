@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Pre_Alert %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Create_Pre_Alert %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/online_shopping/add_pre_alert"><%= lang_data.Create_Pre_Alert %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/online_shopping/add_pre_alert" method="post" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Estimated_delivery_date %></label>
+                                <div class="input-group left-radius"><span class="input-group-text" id="inputGroupPrepend"><i data-feather="calendar"></i></span>
+                                  <input class="form-control digits" id="minMaxExample" type="text" name="date" placeholder="MM/DD/YYYY" required>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="col-form-label"><%= lang_data.Courier_company %></div>
+                                <select class="js-example-basic-single" name="courier_company" required>
+                                  <option value selected disabled>Search Courier company</option>
+                                  <% courier_company_data.forEach((data) => { %>
+                                    <option value="<%= data.id %>"><%= data.companies_name %></option>
+                                  <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"># <%= lang_data.Tracking %></label>
+                                <input class="form-control" type="text" name="tracking" placeholder="# Tracking" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Store %> / <%= lang_data.Supplier %></label>
+                                <input class="form-control" type="text" name="store_supplier" placeholder="Store / Supplier" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.USD_Purchase_price %> (<%= accessdata.data.site_currency %>)</label>
+                                <input class="form-control" type="number" name="purchase_price" placeholder="Purchase price" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Package_Description %></label>
+                                <input class="form-control" type="text" name="description" placeholder="Description" required>
+                            </div>
+
+                            <div class="col-4 mb-4">
+                                <label class="btn btn-square btn-info mt-4 text-nowrap" id="add_product_image" for="file-1"><%= lang_data.Upload_Image %></label>
+                                <div class="form-input">                                           
+                                  <img id="file-preview" width="250px" height="250px" src="../images/dashboard/default/profile.png" alt="image">
+                                  
+                                
+                                  <input class="d-none" type="file" id="file-1" name="image" onchange="showPreview(event)" required>
+                                  
+                                </div>
+                                <p class="font-danger" id="image_error"></p>
+                              </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary" id="add_pre_alert_submit" type="submit"><%= lang_data.Add_Pre_Alert %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

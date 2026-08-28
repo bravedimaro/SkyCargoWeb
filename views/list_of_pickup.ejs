@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.pickups %></title>
+    <%- include('./partials/meta'); -%>
+
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3><%= lang_data.pickups %></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="/pickup/list_of_pickup"><%= lang_data.List_of_Pickup %></a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                            
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header pb-0 d-flex justify-content-between">
+                                <h4><%= lang_data.List_of_Pickup %></h4>
+                                <a href="/pickup/create_pickup" class="btn btn-pill btn-primary btn-air-primary"><%= lang_data.Add_New_Pickup %></a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1" aria-label="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th><%= lang_data.Tracking %></th>
+                                                <th><%= lang_data.date %></th>
+                                                <th><%= lang_data.Sender %></th>
+                                                <th><%= lang_data.Recipient %></th>
+                                                <th><%= lang_data.status %></th>
+                                                <th><%= lang_data.Payment %></th>
+                                                <th><%= lang_data.Action %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% pickup_data.forEach((data) => { %>
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <td><%= data.invoice %></td>
+                                                    <td><%= data.date.toLocaleDateString() %></td>
+                                                    <td><%= data.customers_firstname %> <%= data.customers_lastname %></td>
+                                                    <td><%= data.client_firstname %> <%= data.client_lastname %></td>
+                                                    <td>
+                                                        <% if (data.delivery_status == '8') { %>
+                                                            <span class="badge badge-danger p-2">Cancelled</span>
+
+                                                        <% } else if (data.delivery_status == '6') { %>
+                                                            <span class="badge badge-success p-2">Delivered</span>
+
+                                                        <% } else if (data.shipping_status == null) { %>
+                                                            <span class="badge badge-secondary p-2">Accept pickup</span>
+
+                                                        <% } else { %>
+                                                            <span class="badge badge-primary p-2">Pick_up</span>
+
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= data.payment_type_name %></td>
+                                                    <td> 
+                                                        <% if (role_data.role == '1' || role_data.role == '3') { %>
+                                                                <div class="dropdown">  
+                                                                        <button class="dropbtn btn-pill btn-primary px-4 py-2" type="button"><%= lang_data.Action %></button>
+                                                                        <div class="dropdown-content myDropdown">
+                                                                            <% if(data.shipping_status == 'Cancelled') { %>
+                                                                                <a class="dropdown-item" href="/pickup/show_pickup/<%= data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                                
+                                                                             <% } else if (data.shipping_status == null) { %> 
+                                                                                 <a class="dropdown-item" href="/pickup/show_pickup/<%= data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                                 <a class="dropdown-item" href="/pickup/edit_create_pickup/<%= data.id %>"><i class="fa fa-check-circle font-success f-14"></i> <%= lang_data.Accept_Pickup %></a>
+                                                                                 <a class="dropdown-item" href="/pickup/reject_pickup/<%= data.id %>"><i class="fa fa-times-circle font-danger f-14"></i> <%= lang_data.Reject_Pickup %></a>
+
+                                                                            <% } else { %> 
+                                                                                <a class="dropdown-item" href="/pickup/show_pickup/<%= data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                                <a class="dropdown-item" href="/pickup/print_shipment/<%= data.id %>"><i class="fa fa-print f-14"></i> <%= lang_data.Print_Shipment %></a>
+                                                                                <a class="dropdown-item" href="/pickup/print_label/<%= data.id %>" id="rp_print_label"><i class="fa fa-print f-14"></i> <%= lang_data.Print_Label %></a>
+
+                                                                            <% } %>
+                                                                        </div>
+                                                                </div>
+                                                        <% } else { %>
+                                                                <div class="dropdown">
+                                                                        <button class="dropbtn btn-pill btn-primary px-4 py-2" type="button"><%= lang_data.Action %></button>
+                                                                        <div class="dropdown-content">
+                                                                            <a class="dropdown-item" href="/pickup/show_pickup/<%= data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                            <% if (data.shipping_status == null) { %>
+
+                                                                                <a class="dropdown-item" href="/pickup/reject_pickup/<%= data.id %>"><i class="fa fa-times-circle font-danger f-14"></i> <%= lang_data.Reject_Pickup %></a>
+                                                                            <% } %>
+                                                                        </div>
+                                                                </div>
+                                                        <% } %>
+                                                          
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+        <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

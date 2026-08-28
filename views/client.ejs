@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Clients %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Users %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/users/client"><%= lang_data.Clients %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.Clients %></h4>
+                    <a href="/users/add_client" class="btn btn-pill btn-primary btn-air-primary"><%= lang_data.Add_Client %></a>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Name %></th>
+                            <th id="abc"><%= lang_data.EMail %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% client_data.forEach((data) => { %>
+
+                              <tr>
+                                <td class="d-none"></td>
+                                <td><%= data.first_name %> <%= data.last_name %></td>
+                                <td>SkyCargo_Private_Data</td>
+                                <td>SkyCargo_Private_Data</td>
+                                <td>
+                                  <ul class="action"> 
+                                    <li class="edit"> <a href="/users/edit_client/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                    <li class="delete"><a href="/users/client/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                  </ul>
+                                </td>
+                              </tr>
+
+                          <% }) %>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Name %></th>
+                            <th id="abc"><%= lang_data.EMail %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

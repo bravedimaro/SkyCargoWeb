@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.EMail_Settings %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.EMail_Settings %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/email_settings"><%= lang_data.EMail_Settings %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/settings/email_settings" method="post">
+                        <div class="row g-3">
+                            
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Host %></label>
+                                <input class="form-control" type="text" name="email_host" value="SkyCargo_Private_Data" placeholder="Enter Host" required>
+                            </div>
+                            
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Port %></label>
+                                <input class="form-control" type="number" name="email_port" value="<%= emails_data[0].email_port %>" placeholder="Enter Port" required>
+                            </div>
+                            
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.EMail %></label>
+                                <input class="form-control" type="email" name="email_email" value="SkyCargo_Private_Data" placeholder="Enter E-Mail" required>
+                            </div>
+                            
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Password %></label>
+                                <input class="form-control" type="text" name="email_password" value="SkyCargo_Private_Data" placeholder="Enter Password" required>
+                            </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Update %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

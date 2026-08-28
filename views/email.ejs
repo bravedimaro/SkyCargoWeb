@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div>
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <div>
+          <img src="cid:logo" class="rounded" width="66.5px" height="66.5px" alt="image"></img>
+        </div>
+                   
+        <div>
+          <h2><%= accessdata.data.site_title %></h2>
+        </div>
+      </div>
+
+      <hr class="my-3">
+
+      <% if (page == 'register_packages' || page == 'register_packages_status') { %>
+        <div>
+          <div style="float: left;"> 
+            <h5>
+              Invoice : <%= new_data[0].invoice %> <br>
+              <% if (page == 'register_packages_status') { %>
+                Package Status : <%= status_data[0].status_name %>
+              <% } %>
+            </h5>
+          </div>
+          <div style="float: right;">
+            <h5>
+              Customer <br>
+              Name : <%= customer_data[0].first_name %> <%= customer_data[0].last_name %> <br>
+              Phone No. : <%= customer_data[0].mobile %> <br>
+              Email : <%= customer_data[0].email %>
+            </h5>
+          </div>
+        </div>
+      <% } %>
+
+      <% if (page == 'shipment' || page == 'pickup' || page == 'consolidated' || page == 'shipment_status' || page == 'pickup_status' || page == 'consolidated_status') { %>
+        <div>
+          <div style="float: left;">
+            <h5>
+              Invoice : <%= new_data[0].invoice %> <br>
+              <% if (page == 'shipment_status' || page == 'pickup_status' || page == 'consolidated_status') { %>
+                Package Status : <%= status_data[0].status_name %>
+              <% } %>
+            </h5>
+            <br>
+            <h5>
+              Customer <br>
+              Name : <%= customer_data[0].first_name %> <%= customer_data[0].last_name %> <br>
+              Phone No. : <%= customer_data[0].mobile %> <br>
+              Email : <%= customer_data[0].email %>
+            </h5>
+          </div>
+          <div style="float: right;">
+            <h5>
+              Client <br>
+              Name : <%= client_data[0].first_name %> <%= client_data[0].last_name %> <br>
+              Phone No. : <%= client_data[0].mobile %> <br>
+              Email : <%= client_data[0].email %>
+            </h5>
+          </div>
+        </div>
+      <% } %>
+        
+      <% if (page == 'register_packages' || page == 'shipment' || page == 'pickup' || page == 'register_packages_status' || page == 'shipment_status' || page == 'pickup_status') { %>
+        <table style="width: 100% !important;" aria-label="table">
+          <thead style="width: 100% !important;">
+            <tr>
+              <th style="border: 1px solid black; padding: 5px;"> Package Name </th>
+              <th style="border: 1px solid black; padding: 5px;"> Package Description </th>
+              <th style="border: 1px solid black; padding: 5px;"> Amount </th>
+              <th style="border: 1px solid black; padding: 5px;"> Weight </th>
+              <th style="border: 1px solid black; padding: 5px;"> Length </th>
+              <th style="border: 1px solid black; padding: 5px;"> Width </th>
+              <th style="border: 1px solid black; padding: 5px;"> Height </th>
+              <th style="border: 1px solid black; padding: 5px;"> Weight Vol. </th>
+              <th style="border: 1px solid black; padding: 5px;"> Fixed charge </th>
+              <th style="border: 1px solid black; padding: 5px;"> Declared value </th>
+            </tr>
+          </thead>
+          <tbody style="text-align: center; margin: 5px;">
+            <% package_name_list.forEach((data, x) => { %>
+              <tr style="margin-bottom: 5px;">
+                <td><%= data %></td>
+                <td><%= package_description_list[x] %></td>
+                <td><%= package_amount_list[x] %></td>
+                <td><%= weight_list[x] %></td>
+                <td><%= length_list[x] %></td>
+                <td><%= width_list[x] %></td>
+                <td><%= height_list[x] %></td>
+                <td><%= weight_vol_list[x] %></td>
+                <td><%= f_charge_list[x] %></td>
+                <td><%= decvalue_list[x] %></td>
+              </tr>
+            <% }) %>    
+          </tbody>
+        </table>
+      <% } %>
+
+      <% if (page == 'consolidated' || page == 'consolidated_status') { %>
+        <table style="width: 100% !important;" aria-label="table">
+          <thead style="width: 100% !important;">
+            <tr>
+              <th style="border: 1px solid black; padding: 5px;"> Tracking </th>
+              <th style="border: 1px solid black; padding: 5px;"> Weight </th>
+              <th style="border: 1px solid black; padding: 5px;"> Weight Vol. </th>
+            </tr>
+          </thead>
+          <tbody style="text-align: center; margin: 5px;">
+            <% shipment_invoice_list.forEach((data, x) => { %>
+              <tr style="margin-bottom: 5px;">
+                <td><%= data %></td>
+                <td><%= shipment_weight_list[x] %></td>
+                <td><%= shipment_weight_vol_list[x] %></td>
+              </tr>
+            <% }) %>    
+          </tbody>
+        </table>
+      <% } %>
+                   
+      <div>
+          <h4 style="text-align: right; margin: 5px;">Subtotal : <%= new_data[0].subtotal %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Discount : <%= new_data[0].discount %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Shipping Insurance : <%= new_data[0].shipping_insurance %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Customs Duties : <%= new_data[0].customs_duties %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Tax : <%= new_data[0].tax %> </h4>
+          <% if (page == 'register_packages' || page == 'shipment' || page == 'pickup' || page == 'register_packages_status' || page == 'shipment_status' || page == 'pickup_status' || page == 'consolidated_status') { %>
+          <h4 style="text-align: right; margin: 5px;">Declared value : <%= new_data[0].declared_value %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Fixed charge : <%= new_data[0].fixed_charge %> </h4>
+          <% } %>
+          <h4 style="text-align: right; margin: 5px;">Reissue : <%= new_data[0].reissue %> </h4>
+          <h4 style="text-align: right; margin: 5px;">Total : <%= new_data[0].total %> </h4>
+      </div>
+    </div>
+  </body>
+  </html>

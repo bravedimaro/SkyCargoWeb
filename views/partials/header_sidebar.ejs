@@ -1,0 +1,306 @@
+
+<div class="tap-top"><i data-feather="chevrons-up"></i></div>
+<!-- tap on tap ends-->
+<!-- Loader starts-->
+<div class="loader-wrapper">
+  <div class="loader-box">
+    <div class="loader-19"></div>
+  </div>
+</div>
+<!-- Loader ends-->
+<!-- page-wrapper Start-->
+<div class="page-wrapper compact-wrapper" id="pageWrapper">
+  <!-- Page Header Start-->
+  <div class="page-header">
+    <div class="header-wrapper row m-0">
+      <div class="header-logo-wrapper col-auto p-0">
+        <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
+        <div class="logo-header-main"><a href="/index"><img class="img-fluid for-light img-100" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""><img class="img-fluid for-dark" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""></a></div>
+      </div>
+
+      <div class="left-header col horizontal-wrapper ps-0">
+      </div>
+
+      <div class="nav-right col-6 pull-right right-header p-0">
+        <ul class="nav-menus">
+          <li> 
+          </li>
+          <li>
+            <div class="mode" id="dark_mode"><i class="fa fa-moon-o"></i></div>
+          </li>
+
+          <li class="onhover-dropdown">
+            <div class="message"><i class="fa fa-bell-o"></i></div>
+            <ul class="message-dropdown onhover-show-div">
+              <li>
+                <h6 class="f-18 mb-0"><%= lang_data.Notification %></h6>
+              </li>
+              <% notification_data.forEach((data) => { %>
+                <li>
+                  <div class="d-flex align-items-start">
+                    <div class="message-img bg-light-primary"><i class="fa fa-bell-o font-dark"></i></div>
+                    <div class="flex-grow-1">
+                      <% if (data.type == '1') { %>
+                        <% register_packages_notification.forEach((register_data) => { %>
+                          <% if (register_data.invoice == data.invoice) { %>
+                            <h5 class="mb-1"><a href="/online_shopping/show_register_packages/<%= register_data.id %>"><%= data.notification %></a></h5>
+                            <p><%= data.date.toLocaleDateString() %> <%= data.time %></p>
+                          <% } %>
+                        <% }) %>
+                      <% } %>
+
+                      <% if (data.type == '2') { %>
+                        <% shipment_notification.forEach((shipment_data) => { %>
+                          <% if (shipment_data.invoice == data.invoice) { %>
+                            <h5 class="mb-1"><a href="/shipping/show_create_shipment/<%= shipment_data.id %>"><%= data.notification %> # <%= shipment_data.id %></a></h5>
+                            <p><%= data.date.toLocaleDateString() %> <%= data.time %></p>
+                          <% } %>
+                        <% }) %>
+                      <% } %>
+
+                      <% if (data.type == '3') { %>
+                        <% pickup_notification.forEach((pickup_data) => { %>
+                          <% if (pickup_data.invoice == data.invoice) { %>
+                            <h5 class="mb-1"><a href="/pickup/show_pickup/<%= pickup_data.id %>"><%= data.notification %></a></h5>
+                            <p><%= data.date.toLocaleDateString() %> <%= data.time %></p>
+                          <% } %>
+                        <% }) %>
+                      <% } %>
+
+                      <% if (data.type == '4') { %>
+                        <% consolidated_notification.forEach((consolidated_data) => { %>
+                          <% if (consolidated_data.invoice == data.invoice) { %>
+                            <h5 class="mb-1"><a href="/consolidated/show_consolidated/<%= consolidated_data.id %>"><%= data.notification %></a></h5>
+                            <p><%= data.date.toLocaleDateString() %> <%= data.time %></p>
+                          <% } %>
+                        <% }) %>
+                      <% } %>
+
+                      <% if (data.type == '5') { %>
+                        <h5 class="mb-1"><a href="/online_shopping/pre_alert"><%= data.notification %></a></h5>
+                        <p><%= data.date.toLocaleDateString() %> <%= data.time %></p>
+                      <% } %>
+                      
+                    </div>
+                  </div>
+                </li>
+              <% }) %>
+              <li><a class="btn btn-primary" href="/settings/notification"><%= lang_data.check_all_notification %></a></li>
+            </ul>
+          </li>
+
+          <li class="maximize"><a href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize-2"></i></a></li>
+
+          <li class="language-nav">
+            <div class="translate_wrapper">
+              <div class="current_lang">
+                <div class="lang"><i data-feather="globe"></i></div>
+              </div>
+              <div class="more_lang">
+                <div class="lang" id="en" data-value="en"><i class="flag-icon flag-icon-us"></i><span class="lang-txt">English<span> (US)</span></span></div>
+                <div class="lang" id="in" data-value="in"><i class="flag-icon flag-icon-in"></i><span class="lang-txt">Hindi</span></div>
+                <div class="lang" id="de" data-value="de"><i class="flag-icon flag-icon-de"></i><span class="lang-txt">Deutsch</span></div>
+                <div class="lang" id="pt" data-value="pt"><i class="flag-icon flag-icon-pt"></i><span class="lang-txt">Portugu&ecirc;s<span> (BR)</span></span></div>
+                <div class="lang" id="es" data-value="es"><i class="flag-icon flag-icon-es"></i><span class="lang-txt">Espa&ntilde;ol</span></div>
+                <div class="lang" id="fr" data-value="fr"><i class="flag-icon flag-icon-fr"></i><span class="lang-txt">Fran&ccedil;ais</span></div>
+                <div class="lang" id="cn" data-value="cn"><i class="flag-icon flag-icon-cn"></i><span class="lang-txt">&#x7B80;&#x4F53;&#x4E2D;&#x6587;</span></div>
+                <div class="lang" id="ae" data-value="ae"><i class="flag-icon flag-icon-ae"></i><span class="lang-txt">&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629; <span> (ae)</span></span></div>
+              </div>
+            </div>
+          </li>
+          <input type="hidden" id="hidden_lang" value="<%= language_name.lang %>">
+          <li class="profile-nav onhover-dropdown">
+            <div class="account-user"><i data-feather="user"></i></div>
+            <ul class="profile-dropdown onhover-show-div">
+              <li><a href="/index/profile"><i data-feather="user"></i><span><%= lang_data.Profile %></span></a></li>
+              <li><a href="/logout"><i data-feather="log-in"> </i><span><%= lang_data.Log_Out %></span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Page Header Ends-->
+  <!-- Page Body Start-->
+  <div class="page-body-wrapper">
+    <!-- Page Sidebar Start-->
+    <div class="sidebar-wrapper">
+      <div>
+        <div class="logo-wrapper p-1 px-4">
+          <a href="/index">
+            <img class="img-fluid for-light img-50" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""> 
+             <span class="f-18 f-w-700 text-white"><%= accessdata.data.site_title %></span>
+          </a>
+          <div class="back-btn"><i data-feather="grid"></i></div>
+          <div class="toggle-sidebar icon-box-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
+        </div>
+        <div class="logo-icon-wrapper"><a href="index.html">
+            <div class="icon-box-sidebar"><i data-feather="grid"></i></div></a></div>
+        <nav class="sidebar-main">
+          <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
+          <div id="sidebar-menu">
+            <ul class="sidebar-links" id="simple-bar">
+
+              <li class="back-btn">
+                <div class="mobile-back text-end"><span><%= lang_data.Back %></span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
+              </li>
+
+              <li class="menu-box"> 
+                <ul>
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="/index"><i data-feather="home"> </i><span><%= lang_data.dashboard %></span></a></li>
+                  
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="shopping-cart"></i><span><%= lang_data.Online_Shopping %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <% if(role_data.role == "3") { %>
+                        <li><a href="/online_shopping/list_of_packages"><%= lang_data.List_of_Packages %> </a></li>
+
+                      <% } else { %>
+                        <li><a href="/online_shopping/pre_alert"><%= lang_data.Pre_Alert_List %></a></li>
+                        <% if(role_data.role == "1") { %>
+
+                          <li><a href="/online_shopping/register_packages"><%= lang_data.Register_Packages %> </a></li>
+                        <% } else { %>
+
+                          <li><a href="/online_shopping/add_pre_alert"><%= lang_data.Create_Pre_Alert %> </a></li>
+                        <% } %>
+                        <li><a href="/online_shopping/list_of_packages"><%= lang_data.List_of_Packages %> </a></li>
+                        <% } %>
+                        
+                    </ul>
+                  </li>
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="package"></i><span><%= lang_data.Shipping %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/shipping/create_shipment"><%= lang_data.Create_Shipment %> </a></li>
+                      <% if(role_data.role == "1") { %>
+                      <% } %>
+                      <li><a href="/shipping/list_of_shipment"><%= lang_data.List_of_Shipment %> </a></li>
+                    </ul>
+                  </li>
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="truck"></i><span><%= lang_data.pickups %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/pickup/create_pickup"><%= lang_data.Create_Pickup %> </a></li>
+                      <li><a href="/pickup/list_of_pickup"><%= lang_data.List_of_Pickup %> </a></li>
+                    </ul>
+                  </li>
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="layers"></i><span><%= lang_data.consolidated %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <% if(role_data.role == "1") { %>
+                        <li><a href="/consolidated/add_consolidated"><%= lang_data.Packages_To_Consolidate %> </a></li>
+                      <% } %>
+                      <li><a href="/consolidated/list_of_consolidated"><%= lang_data.List_of_Consolidated %> </a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              
+              <% if(role_data.role != "3") { %>
+                <li class="menu-box"> 
+                  <ul>
+
+                    <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="credit-card"></i><span><%= lang_data.Transactions %> </span></a>
+                      <ul class="sidebar-submenu">
+                        <li><a href="/transactions/add_payment"><%= lang_data.Add_Payment %> </a></li>
+                        <li><a href="/transactions/list_of_payment"><%= lang_data.List_Of_Payment %> </a></li>
+                      </ul>
+                    </li>
+                    <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="users"></i><span><%= lang_data.Users %> </span></a>
+                      <ul class="sidebar-submenu">
+                        <% if(role_data.role == "1") { %>
+                          <li><a href="/users/customers"><%= lang_data.Customers %> </a></li>
+                          <li><a href="/users/client"><%= lang_data.Clients %> </a></li>
+                          <li><a href="/users/drivers"><%= lang_data.Drivers %> </a></li>
+                        <% } else { %>
+                          <li><a href="/users/client"><%= lang_data.Clients %> </a></li>
+                        <% } %>
+                      </ul>
+                    </li>
+                    <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="file-text"></i><span><%= lang_data.General_Report %> </span></a>
+                      <ul class="sidebar-submenu">
+                        <li><a href="/report/pre_alert"><%= lang_data.Pre_Alert_Report %> </a></li>
+                        <li><a href="/report/register_packages"><%= lang_data.Register_Packages_Report %> </a></li>
+                        <li><a href="/report/shipment"><%= lang_data.Shipment_Report %> </a></li>
+                        <li><a href="/report/pickup"><%= lang_data.Pickup_Report %> </a></li>
+                        <li><a href="/report/consolidated"><%= lang_data.Consolidate_Report %> </a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <% } %>
+
+                <% if (role_data.role == "2") { %>
+                  <li class="menu-box"> 
+                    <ul>
+                      <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav" href="/users/edit_customers/<%= role_data.id %>"><i data-feather="map"></i><span><%= lang_data.Address %></span></a></li>
+                    </ul>
+                  </li>
+                <% } %>
+               
+              <% if(role_data.role == "1") { %>
+
+              
+
+              <li class="menu-box"> 
+                <ul>
+                  
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="credit-card"></i><span><%= lang_data.Payment %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/payment_type"><%= lang_data.Payment_Type %> </a></li>
+                      <li><a href="/settings/payment_methods"><%= lang_data.Payment_Methods %> </a></li>
+                    </ul>
+                  </li>
+
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="list"></i><span><%= lang_data.Miscellaneous %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/office_group"><%= lang_data.Office_Group %> </a></li>
+                      <li><a href="/settings/agency_group"><%= lang_data.Agency_Group %> </a></li>
+                      <li><a href="/settings/courier_companies"><%= lang_data.Courier_Companies %> </a></li>
+                      <li><a href="/settings/shipping_status"><%= lang_data.Shipping_Status %> </a></li>
+                      <li><a href="/settings/logistics_service"><%= lang_data.Logistics_Service %> </a></li>
+                      <li><a href="/settings/prefix_service"><%= lang_data.Shipping_Prefix %> </a></li>
+                    </ul>
+                  </li>
+
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="compass"></i><span><%= lang_data.Shipping_Taxes %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/taxes"><%= lang_data.Taxes_And_Fees %> </a></li>
+                      <li><a href="/settings/length_units"><%= lang_data.Length_Units %> </a></li>
+                      <li><a href="/settings/weight_units"><%= lang_data.Weight_units %> </a></li>
+                    </ul>
+                  </li>
+
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="percent"></i><span><%= lang_data.Shipping_Rate %></span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/rates"><%= lang_data.Rates %> </a></li>
+                      <li><a href="/settings/packaging"><%= lang_data.Type_of_packaging %> </a></li>
+                      <li><a href="/settings/shipping_modes"><%= lang_data.Shipping_Modes %> </a></li>
+                      <li><a href="/settings/shipping_times"><%= lang_data.Shipping_Times %> </a></li>
+                    </ul>
+                  </li>
+
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="map"></i><span><%= lang_data.Location %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/countries"><%= lang_data.Countries %> </a></li>
+                      <li><a href="/settings/states"><%= lang_data.State %> </a></li>
+                      <li><a href="/settings/city"><%= lang_data.City %> </a></li>
+                    </ul>
+                  </li>
+
+                  <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="javascript:void(0)"><i data-feather="settings"></i><span><%= lang_data.Settings %> </span></a>
+                    <ul class="sidebar-submenu">
+                      <li><a href="/settings/general_settings"><%= lang_data.General_Settings %> </a></li>
+                      <li><a href="/settings/email_settings"><%= lang_data.EMail_Settings %> </a></li>
+                    </ul>
+                  </li>
+
+                </ul>
+              </li>
+
+              <% } %>
+
+            </ul>
+          </div>
+          <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
+        </nav>
+      </div>
+    </div>
+    <!-- Page Sidebar Ends-->

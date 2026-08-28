@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Online_Shopping %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Update_Shipment %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/online_shopping/edit_register_packages/<%= register_packages.id %>"><%= lang_data.Edit_Register_Packages %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <form action="/online_shopping/edit_register_packages/<%= register_packages.id %>" method="post" enctype="multipart/form-data">
+              <div class="row">
+              
+                <!-- Scroll - vertical dynamic Starts-->
+                <div class="col-lg-12 col-sm-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+
+                        <div class="col-4">
+                          <label class="form-label" for="validationCustom01"><%= lang_data.Number %> (<%= lang_data.Tracking %>)</label>
+                          <div class="input-group left-radius"><span class="input-group-text font-danger m-r-5" id="inputGroupPrepend"><b> Invoice #</b></span>
+                              <input class="form-control" id="" type="text" name="invoice" value="<%= register_packages.invoice %>" readonly>
+                          </div>
+                        </div>
+
+                        <dic class="col-4">
+                          <div class="col-form-label"><%= lang_data.List_of_Agencies %> </div>
+                          <select class="js-example-basic-single" name="agency">
+                            <option value selected disabled>Search Agencies</option>
+                            <% agencies_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.agency == data.id ? "selected" : "" %>> <%= data.agency_name %></option>
+                            <% }) %>
+                          </select>
+                        </dic>
+
+                        <dic class="col-4">
+                          <div class="col-form-label"><%= lang_data.Office_of_origin %></div>
+                          <select class="js-example-basic-single" name="office_of_origin">
+                            <option value selected disabled>Search Office</option>
+                            <% office_group_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.office_of_origin == data.id ? "selected" : "" %>> <%= data.office_name %></option>
+                            <% }) %>
+                          </select>
+                        </dic>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <h4><%= lang_data.Sender_Information %></h4>
+                        <a href="/users/add_customers" class="btn btn-pill btn-primary btn-air-primary"><%= lang_data.Add_Sender %></a>
+                      </div> 
+
+                      <hr>
+                      <div class="row">
+
+                        <dic class="col-6">
+                          <div class="col-form-label"><%= lang_data.Sender %>/<%= lang_data.Customer %></div>
+                          <select class="js-example-basic-single" name="customer" id="register_packages_customer" required>
+                            <option value selected disabled>Search Sender / Customer</option>
+                            <% customers_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.customer == data.id ? "selected" : "" %>> <%= data.first_name %> <%= data.last_name %></option>
+                            <% }) %>
+                          </select>
+                          <input class="form-control" type="hidden" id="hidden_customer" value="<%= register_packages.customer %>">
+                        </dic>
+
+                        <dic class="col-6">
+                          <div class="col-form-label"><%= lang_data.Sender %>/<%= lang_data.Customer %> <%= lang_data.Address %></div>
+                          <select class="js-example-basic-single" name="customer_address" id="customer_address" required>
+                            <% country.forEach((country, i) => { %>
+                                <% countries_list.forEach((countries_list) => { %>
+                                  <% if (countries_list.id == country) { %>
+                                    
+                                    <% state_list.forEach((state_list) => { %>
+                                      <% if (state_list.id == state[i]) { %>
+
+                                        <% city_list.forEach((city_list) => { %>
+                                          <% if (city_list.id == city[i]) { %>
+
+                                            <option value="<%= address[i] %>" <%= register_packages.customer_address == address[i] ? "selected" : "" %> > Country : <%= countries_list.countries_name %> | State : <%= state_list.state_name %> | City : <%= city_list.city_name %> | Zip COde : <%= zipcode[i] %> | Address : <%= address[i] %></option>
+                                          <% } %>
+                                        <% }) %>
+                                        
+                                      <% } %>
+                                    <% }) %>
+
+                                  <% } %>
+                                <% }) %>
+                            <% }) %>
+                          </select>
+                        </dic>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4><%= lang_data.Sender_Information %></h4>
+
+                      <hr>
+                      <div class="row">
+
+                        <div class="col-4">
+                          <label class="form-label"># <%= lang_data.Tracking %></label>
+                          <input class="form-control" type="text" name="tracking_no" placeholder="Tracking" value="<%= register_packages.tracking_no %>" required>
+                        </div>
+
+                        <div class="col-4">
+                          <label class="form-label"><%= lang_data.Store %> / <%= lang_data.Supplier %></label>
+                          <input class="form-control" type="text" name="supplier" placeholder="Store / supplier" value="<%= register_packages.supplier %>" required>
+                        </div>
+
+                        <div class="col-4">
+                          <label class="form-label"><%= lang_data.Purchase_price %> (<%= accessdata.data.site_currency %>)</label>
+                          <input class="form-control" type="number" name="purchase_price" placeholder="Purchase price" value="<%= register_packages.purchase_price %>" required>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Shipping_mode %></div>
+                          <select class="js-example-basic-single" name="shipping_mode" required>
+                            <option value selected disabled>Search Shipping Mode</option>
+                            <% logistics_service_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.shipping_mode == data.id ? "selected" : "" %> > <%= data.service_name %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Type_of_packaging %></div>
+                          <select class="js-example-basic-single" name="packaging" required>
+                            <option value selected disabled>Search packaging</option>
+                            <% packaging_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.packaging == data.id ? "selected" : "" %>> <%= data.packaging_type %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Courier_company %></div>
+                          <select class="js-example-basic-single" name="courier_company" required>
+                            <option value selected disabled>Search company</option>
+                            <% courier_companies_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.courier_company == data.id ? "selected" : "" %>> <%= data.companies_name %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Service_Mode %></div>
+                          <select class="js-example-basic-single" name="service_mode" required>
+                            <option value selected disabled>Search Mode</option>
+                            <% shipping_modes_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.service_mode == data.id ? "selected" : "" %>> <%= data.shipping_modes %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Delivery_time %></div>
+                          <select class="js-example-basic-single" name="delivery_time" required>
+                            <option value selected disabled>Search time</option>
+                            <% shipping_times_list.forEach((data) => { %>
+                              <option value="<%= data.id %>" <%= register_packages.delivery_time == data.id ? "selected" : "" %>> <%= data.shipping_times %></option>
+                            <% }) %>
+                          </select>
+                        </div>
+
+                        <div class="col-4 mt-3">
+                          <div class="col-form-label"><%= lang_data.Delivery_Status %> <i class="fa fa-truck font-danger"></i></div>
+                            <select class="js-example-basic-single" name="status_name" required>
+                              <option value selected disabled>Search Status</option>
+                              <% shipping_status_list.forEach((data) => { %>
+                                <option value="<%= data.id %>" <%= register_packages.status == data.id ? "selected" : "" %>> <%= data.status_name %></option>
+                              <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-4">
+                          <label class="btn btn-square btn-info mt-4 text-nowrap" id="add_product_image" for="file-1"><%= lang_data.Upload_Image %></label>
+                          <div class="form-input">                                           
+                            <img id="file-preview" width="250px" height="250px" src="../../uploads/<%= register_packages.image %>" alt="image">
+                          
+                            <input class="d-none" type="file" id="file-1" name="image" onchange="showPreview(event)">
+                          </div>
+                        </div>
+                        <input class="form-control form-control-sm" type="hidden" name="hidden_image" id="hidden_image" value="0">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <h4><%= lang_data.Package_Information %></h4>
+
+                        <button class="btn btn-pill btn-primary btn-air-primary text-nowrap edit_register_add_box" type="button" id="edit_register_add_box"><%= lang_data.Add_Box_or_Packages %></button>
+                      </div>
+
+                      <hr>
+                      <div id="register_add_row">
+                        <% package_name_list.forEach((package_name, x) => { %>
+
+                          <div class="row mb-3 package_information">
+                            <input class="form-control form-control-sm" type="hidden" value="<%= register_packages.weight %>" id="hidden_loop_val">
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Package_Name"><%= lang_data.Package_Name %></label>
+                              <input class="form-control form-control-sm" type="text" name="package_name" placeholder="Name" value="<%= package_name %>" required>
+                            </div>
+    
+                            <div class="col-lg-2 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Package_Description"><%= lang_data.Package_Description %></label>
+                              <input class="form-control form-control-sm" type="text" name="package_description" value="<%= package_description_list[x] %>" placeholder="Description" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Amount"><%= lang_data.Amount %></label>
+                              <input class="form-control form-control-sm" type="number" name="package_amount" value="<%= package_amount_list[x] %>" placeholder="Amount" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Weight"><%= lang_data.Weight %></label>
+                              <input class="form-control form-control-sm edit_register_packages_weight" type="number" value="<%= weight_list[x] %>" name="weight" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Length"><%= lang_data.Length %></label>
+                              <input class="form-control form-control-sm edit_register_packages_sum" type="number" value="<%= length_list[x] %>" name="length" id="edit_register_packages_length_<%= x %>" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Width"><%= lang_data.Width %></label>
+                              <input class="form-control form-control-sm edit_register_packages_sum" type="number" value="<%= width_list[x] %>" name="width" id="edit_register_packages_width_<%= x %>" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Height"><%= lang_data.Height %></label>
+                              <input class="form-control form-control-sm edit_register_packages_sum" type="number" value="<%= height_list[x] %>" name="height" id="edit_register_packages_height_<%= x %>" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Weight_Vol"><%= lang_data.Weight_Vol %> <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="L x W x H / Volume percentage"></i></label>
+                              <input class="form-control form-control-sm edit_register_packages_weight_vol" type="number" value="<%= weight_vol_list[x] %>" name="weight_vol" id="edit_register_packages_weight_vol_<%= x %>" placeholder="0" readonly>
+                              <input class="form-control form-control-sm" type="hidden" name="" id="edit_register_packages_vol_per" value="<%= taxe_data.vol_per %>">
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_Fixed_charge"><%= lang_data.Fixed_charge %></label>
+                              <input class="form-control form-control-sm edit_register_packages_f_charge" type="number" value="<%= f_charge_list[x] %>" name="f_charge" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-start flex-column">
+                              <label class="form-label mb-auto" for="validationCustom01" id="json_DecValue"><%= lang_data.Declared_value %></label>
+                              <input class="form-control form-control-sm edit_register_packages_decvalue" type="number" value="<%= decvalue_list[x] %>" name="decvalue" min="0" required>
+                            </div>
+    
+                            <div class="col-lg-1 col-md-4 d-flex align-items-center mt-4">
+                              <a type="submit"><i class="icon-trash f-20 font-danger"></i></a>
+                            </div>
+                            
+                          </div>
+                        <% }) %>
+                      </div>
+                
+                      <hr>
+
+                      <div class="row">
+                          <div class="col-lg-7 col-sm-12">
+                            <div class="row g-3">
+
+                              <div class="col-lg-4 col-sm-12">
+                                <label class="form-label"><%= lang_data.Total_Weight %></label>
+                                <input class="form-control edit_register_packages_sum" type="number" id="total_weight" name="total_weight" value="<%= register_packages.total_weight %>" readonly>
+                              </div>
+
+                              <div class="col-lg-4 col-sm-12">
+                                <label class="form-label"><%= lang_data.Total_Weight_Vol %></label>
+                                <input class="form-control edit_register_packages_sum" type="number" id="total_weight_vol" name="total_weight_vol" value="<%= register_packages.total_weight_vol %>" readonly>
+                              </div>
+
+                              <div class="col-lg-4 col-sm-12">
+                                <label class="form-label"><%= lang_data.Total_DecValue %></label>
+                                <input class="form-control edit_register_packages_sum" type="number" id="total_decvalue" name="total_decvalue" value="<%= register_packages.total_decvalue %>" readonly>
+                              </div>
+                              
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Price_kg %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_price_kg" name="add_price_kg" value="<%= register_packages.add_price_kg %>" min="0" required>
+                              </div>
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Discount %> (%)</label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_discount" name="add_discount" value="<%= register_packages.add_discount %>" min="0" required>
+                              </div>
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Value_assured %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_value_assured" name="add_value_assured" value="<%= register_packages.add_value_assured %>" min="0" required>
+                              </div>
+                        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Shipping_Insurance %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_shipping_insurance" name="add_shipping_insurance" value="<%= register_packages.add_shipping_insurance %>" min="0" required>
+                              </div>
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Customs_Duties %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_customs_duties" name="add_customs_duties" value="<%= register_packages.add_customs_duties %>" min="0" required>
+                              </div> 
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Tax %> <%= taxe_data.tax_count == 1 ? "(%)" : "(Fix)" %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_tax" name="add_tax" value="<%= register_packages.add_tax %>" min="0" required>
+
+                                  <input class="form-control" type="hidden" name="tax_count" id="tax_count" value="<%= taxe_data.tax_count %>">
+                              </div>
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Declared_value %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_declared_value" name="add_declared_value" value="<%= register_packages.add_declared_value %>" min="0" required>
+                              </div>
+        
+                              <div class="col-lg-4 col-sm-12">
+                                  <label class="form-label"><%= lang_data.Reissue %></label>
+                                  <input class="form-control edit_register_packages_sum" type="number" id="add_reissue" value="<%= register_packages.reissue %>" min="0" required>
+                              </div>
+                              
+                            </div>
+                          </div>
+
+                          <div class="col-lg-5 col-sm-12 pt-4 px-5">
+                            
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Subtotal %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="subtotal" type="number" name="subtotal" value="<%= register_packages.subtotal %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Discount %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="discount" type="number" name="discount" value="<%= register_packages.discount %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Shipping_Insurance %> <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="(Value assured / 100) * Shipping Insurance"></i></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="shipping_insurance" type="number" name="shipping_insurance" value="<%= register_packages.shipping_insurance %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Customs_Duties %> <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="(Weight + Weight Vol.) * Customs Duties "></i></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="customs_duties" type="number" name="customs_duties" value="<%= register_packages.customs_duties %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Tax %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="tax" type="number" name="tax" value="<%= register_packages.tax %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Declared_value %> <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="(Declared value / 100 ) * Declared value"></i></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="declared_value" type="number" name="declared_value" value="<%= register_packages.declared_value %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Fixed_charge %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="fixed_charge" type="number" name="fixed_charge" value="<%= register_packages.fixed_charge %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-1">
+                              <h5><%= lang_data.Reissue %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control form-control-sm w-25" id="reissue" type="number" name="reissue" value="<%= register_packages.reissue %>" readonly>
+                              </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-2">
+                              <h5><%= lang_data.Total %></h5>
+                              <div class="input-group input-group-sm w-25"><span class="input-group-text bg-dark"><%= accessdata.data.site_currency %></span>
+                                <input class="form-control" id="total" type="number" name="total" value="<%= register_packages.total %>" readonly>
+                                <input class="form-control" id="hidden_paid_amount" type="hidden" name="paid_amount" value="<%= register_packages.paid_amount %>">
+                              </div>
+                            </div>
+
+                          </div>
+                      </div>
+                      
+                      <hr>
+                      
+                      <div class="col-12">
+                          <div class="d-flex align-items-center justify-content-end">
+                              <button class="btn btn-square btn-primary btn-air-primary" id="edit_register_packages_save" type="submit"><i class="fa fa-floppy-o"></i> &nbsp; <%= lang_data.Save %></button>
+                          </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Scroll - vertical dynamic Ends-->
+              </div>
+            </form>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

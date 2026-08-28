@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Courier_Companies %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Edit_Courier_Companies %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/courier_companies"><%= lang_data.List_of_Courier_Companies %></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/edit_courier_companies/<%= courier_companies_data[0].id %>"><%= lang_data.Edit_Courier_Companies %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/settings/edit_courier_companies/<%= courier_companies_data[0].id %>" method="post">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Company_Name %></label>
+                                    <input class="form-control" type="text" name="companies_name" value="<%= courier_companies_data[0].companies_name %>" placeholder="Enter Company Name" required>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Phone_No %></label>
+                                    <input class="form-control" type="number" name="companies_mobile" value="<%= courier_companies_data[0].companies_mobile %>" placeholder="Enter Phone No." required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Address %></label>
+                                    <input class="form-control" type="text" name="companies_address" value="<%= courier_companies_data[0].companies_address %>" placeholder="Enter Address" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.City %></label>
+                                    <input class="form-control" type="text" name="companies_city" value="<%= courier_companies_data[0].companies_city %>" placeholder="Enter City Name" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Country %></label>
+                                    <input class="form-control" type="text" name="companies_country" value="<%= courier_companies_data[0].companies_country %>" placeholder="Enter Country Name" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Zip_Code %></label>
+                                    <input class="form-control" type="number" name="companies_zipcode" value="<%= courier_companies_data[0].companies_zipcode %>" placeholder="Enter Zip Code" required>
+                                </div>
+
+                                <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Edit_Company %></button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

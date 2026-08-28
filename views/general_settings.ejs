@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.General_Settings %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.General_Settings %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/general_settings"><%= lang_data.General_Settings %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/settings/general_settings" method="post" class="needs-validation" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-12 text-center">
+                                <img src="../uploads/<%= general_settings_data[0].site_logo %>" class="logo-abbr mx-2 b-r-10" width="130.5px" height="130.5px" alt="image">
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Site_Title %></label>
+                                <input class="form-control" type="text" name="site_title" value="<%= general_settings_data[0].site_title %>" placeholder="Enter Site Title">
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Logo %></label>
+                                <input class="form-control form-control-lg" type="file" name="site_logo" value="<%= general_settings_data[0].site_logo %>" id="site_logo">
+
+                                <input class="form-control form-control-lg" type="hidden" name="site_logo_hidden" value="0" id="site_logo_hidden">
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.Currency %></label>
+                              <input class="form-control" type="text" name="site_currency" value="<%= general_settings_data[0].site_currency %>" placeholder="Enter Currency Symbol">
+                            </div>
+
+                            <div class="col-6">
+                                <label for="currency" class="form-label"><%= lang_data.Timezone %></label>
+                                <select class="form-control wide" name="site_timezone" data-id="<%= general_settings_data[0].site_timezone %>" id="settings_timezone">
+                                    <option value selected disabled>Choose Timezone</option>  
+                                </select>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="d-flex mb-2 mt-4">
+                                    <div class="icon-state switch-outline">
+                                      <label class="switch">
+                                        <input type="checkbox" name="currency_placement" value="1" <%= general_settings_data[0].currency_placement == 1 ?  'checked' : '' %> ><span class="switch-state bg-success"></span>
+                                      </label>
+                                    </div>
+                                    <label class="col-form-label m-l-10"><%= lang_data.Currency_Symbol_Placement_Right_side %> (<%= lang_data.Default_Left_Side %>)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                              <label for="Thousands_Separator" class="form-label"><%= lang_data.Thousands_Separator %></label>
+                              <select class="form-control wide" name="thousands_separator"> 
+                                <option value="1" <%= general_settings_data[0].thousands_separator == 1 ?  'selected' : '' %> >, (Comma)</option>
+                                <option value="2" <%= general_settings_data[0].thousands_separator == 2 ?  'selected' : '' %> >. (Full Stop)</option>
+                                <option value="3" <%= general_settings_data[0].thousands_separator == 3 ?  'selected' : '' %> >` (Apostrophe)</option>
+                                <option value="4" <%= general_settings_data[0].thousands_separator == 4 ?  'selected' : '' %> >None</option>
+                                <option value="5" <%= general_settings_data[0].thousands_separator == 5 ?  'selected' : '' %> >Space</option>
+                              </select>
+                            </div>
+
+                            <hr>
+                            <h5>Notification Verification</h5>
+
+                            <div class="col-6">
+                              <label class="form-label">OneSignal App ID</label>
+                              <input class="form-control" type="text" name="onesignal_app_id" value="SkyCargo_Private_Data" placeholder="Enter App ID">
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label">OneSignal API Key</label>
+                              <input class="form-control" type="text" name="onesignal_api_key" value="SkyCargo_Private_Data" placeholder="Enter API Key">
+                            </div>
+
+                            <hr>
+
+                            <h5>SMS Verification</h5>
+
+                            <div class="col-6">
+                              <label class="form-label">Twilio Account SID </label>
+                              <input class="form-control" type="text" name="twilio_sid" value="SkyCargo_Private_Data" placeholder="Twilio Account SID">
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label">Twilio Auth Token</label>
+                              <input class="form-control" type="text" name="twilio_auth_token" value="SkyCargo_Private_Data" placeholder="Twilio Auth Token">
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label">Twilio Phone Number</label>
+                              <input class="form-control" type="text" name="twilio_phone_no" value="SkyCargo_Private_Data" placeholder="Twilio Phone Number">
+                            </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Update_Profile %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

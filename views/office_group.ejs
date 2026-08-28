@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Office_Group %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Add_New_Services %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/office_group"><%= lang_data.List_of_Offices %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.List_of_Offices %></h4>
+                    <a href="/settings/add_office_group" class="btn btn-pill btn-primary btn-air-primary"><%= lang_data.Add_New_Office %></a>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Office_Name %></th>
+                            <th id="abc"><%= lang_data.Office_Code %></th>
+                            <th id="abc"><%= lang_data.Address %></th>
+                            <th id="abc"><%= lang_data.City %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% office_group_data.forEach((data) => { %>
+
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.office_name %></td>
+                              <td><%= data.office_code %></td>
+                              <td><%= data.office_address %></td>
+                              <td><%= data.office_city %></td>
+                              <td><%= data.office_mobile %></td>
+                              <td> 
+                                <ul class="action"> 
+                                  <li class="edit"> <a href="/settings/edit_office_group/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                  <li class="delete"><a href="/settings/office_group/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Office_Name %></th>
+                            <th id="abc"><%= lang_data.Office_Code %></th>
+                            <th id="abc"><%= lang_data.Address %></th>
+                            <th id="abc"><%= lang_data.City %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

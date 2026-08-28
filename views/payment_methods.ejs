@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Payment %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Payment %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/payment_methods"><%= lang_data.Payment_Methods %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.Payment_Methods %></h4>
+                    <a class="btn btn-pill btn-primary btn-air-primary" data-bs-toggle="modal" data-bs-target="#payment_toggle"><%= lang_data.Add_New_Payment %></a>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Payment_Methods %></th>
+                            <th id="abc"><%= lang_data.Days %></th>
+                            <th id="abc"><%= lang_data.Active %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% payment_methods_data.forEach((data) => { %>
+
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.payment_methods %></td>
+                              <td><%= data.payment_days %></td>
+                              <td>
+                                <div class="form-check form-switch form-switch-md">
+                                  <input class="form-check-input" type="checkbox" id="payment_methods_active" name="active" value="1" data-id="<%= data.id %>" <%= data.active == '1' ? "checked" : "" %>>
+                                </div>
+                              </td>
+                              <td> 
+                                <ul class="action">
+                                  <li class="edit"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_payment_toggle" id="edit_payment_modal" data-id="<%= data.id %>" data-methods="<%= data.payment_methods %>" data-days="<%= data.payment_days %>"><i class="icon-pencil-alt"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                          
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                              <th id="abc" class="d-none"></th>
+                              <th id="abc"><%= lang_data.Payment_Methods %></th>
+                              <th id="abc"><%= lang_data.Days %></th>
+                              <th id="abc"><%= lang_data.Active %></th>
+                              <th id="abc"><%= lang_data.Action %></th>
+                            </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+
+        <!-- payment modal-->
+
+        <div class="modal fade" id="payment_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Add_Payment_method %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/settings/payment_methods" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+
+                      <div class="col-12">
+                          <label class="form-label"><%= lang_data.Payment_Methods %></label>
+                          <input class="form-control" type="text" name="payment_methods" placeholder="Enter Payment method" required>
+                      </div>
+
+                      <div class="col-12">
+                          <label class="form-label"><%= lang_data.Days %></label>
+                          <input class="form-control" type="number" name="payment_days" placeholder="Enter Payment Days" required>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+        
+        <!-- edit payment modal-->
+
+        <div class="modal fade" id="edit_payment_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Edit_Payment_method %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="payment_id" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+                      
+                      <div class="col-12">
+                          <label class="form-label"><%= lang_data.Payment_Methods %></label>
+                          <input class="form-control" type="text" name="payment_methods" id="payment_methods" placeholder="Enter Payment method" required>
+                      </div>
+
+                      <div class="col-12">
+                          <label class="form-label"><%= lang_data.Days %></label>
+                          <input class="form-control" type="number" name="payment_days" id="payment_days" placeholder="Enter Payment Days" required>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

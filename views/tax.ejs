@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= lang_data.Taxes_And_Fees %></title>
+    <%- include('./partials/meta'); -%>
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Taxes_And_Fees %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/taxes"><%= lang_data.Taxes %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+            
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/settings/taxes" method="post">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label"><strong class="font-danger"> <%= lang_data.USD %> </strong> <%= lang_data.Minimum_cost_to_apply_the_tax %></label>
+                                    <input class="form-control" type="text" name="min_tax_apply" value="<%= taxe_data[0].min_tax_apply %>" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><strong class="font-danger"> % </strong> <%= lang_data.Tax %></label>
+                                    <input class="form-control" type="text" name="tax" value="<%= taxe_data[0].tax %>" required>
+                                </div>
+
+                                <div class="col-6">
+                                  <label class="form-label"><strong class="font-danger"> <%= lang_data.USD %> </strong> <%= lang_data.Minimum_cost_to_apply_declared_tax %></label>
+                                  <input class="form-control" type="text" name="min_declared_tax" value="<%= taxe_data[0].min_declared_tax %>" required>
+                                </div>
+                                
+                                <div class="col-6 pt-4">
+                                  <div class="d-flex mt-2">
+                                    <div class="icon-state switch-outline">
+                                      <label class="switch">
+                                        <input type="checkbox" name="tax_count" value="1" <%= taxe_data[0].tax_count == "1" ? "checked" : "" %> ><span class="switch-state bg-success"></span>
+                                      </label>
+                                    </div>
+                                    <label class="col-form-label m-l-10"><%= lang_data.Tax_Count_In_Price %> (<%= lang_data.Default_Percentage %>)</label>
+                                  </div>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <label class="form-label"><strong class="font-danger"> % </strong> <%= lang_data.Tax_declared %></label>
+                                    <input class="form-control" type="text" name="declared_tax" value="<%= taxe_data[0].declared_tax %>" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><strong class="font-danger"> % </strong> <%= lang_data.Shipping_Insurance %></label>
+                                    <input class="form-control" type="text" name="shipping_insurance" value="<%= taxe_data[0].shipping_insurance %>" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><strong class="font-danger"> % </strong> <%= lang_data.Customs_Duties %></label>
+                                    <input class="form-control" type="text" name="custom_duties" value="<%= taxe_data[0].custom_duties %>" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label"><%= lang_data.Volume_percentage %> L x W x H / <%= taxe_data[0].vol_per %></label>
+                                    <input class="form-control" type="text" name="vol_per" value="<%= taxe_data[0].vol_per %>" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label"><%= lang_data.Length_Units %></label>
+                                    <select class="form-select text-uppercase" name="length_units" required>
+                                      <% length_units_data.forEach((data) => { %>
+                                        
+                                        <option value="<%= data.id %>" <%= data.id == taxe_data[0].length_units ? "selected" : "" %>><%= data.unit_name %></option>
+                                      <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label"><%= lang_data.Weight_value %></label>
+                                    <input class="form-control" type="text" name="weight_val" value="<%= taxe_data[0].weight_val %>" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label"><%= lang_data.Weight_units %></label>
+                                    <select class="form-select text-uppercase" name="weight_units" required>
+                                      <% weight_units_data.forEach((data) => { %>
+                                        
+                                        <option value="<%= data.id %>" <%= data.id == taxe_data[0].weight_units ? "selected" : "" %>><%= data.unit_name %></option>
+                                      <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-pill btn-primary btn-air-primary" type="submit"><%= lang_data.Save %></button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

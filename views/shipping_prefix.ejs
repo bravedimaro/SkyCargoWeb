@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Shipping_Prefix %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Miscellaneous %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/prefix_service"><%= lang_data.Shipping_Prefix %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+            
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.Shipping_Prefix %></h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc">#</th>
+                            <th id="abc"><%= lang_data.Shipping_Prefix %></th>
+                            <th id="abc"><%= lang_data.Type %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <% var i = 1 %>
+                              <% shipping_prefix_data.forEach((data) => { %>
+                                <tr>
+                                  <td class="d-none"></td>
+                                    <td><%= i %></td>
+                                    <td><%= data.prefix %></td>
+                                    <td>
+                                        <% if (data.type == '1') { %>
+                                            Registered packages
+                                        <% } else if (data.type == '2') { %>
+                                            Shipments
+                                        <% } else if (data.type == '3') { %>
+                                            Pickups
+                                        <% } else { %>
+                                            Consolidated
+                                        <% } %> 
+                                    </td>
+                                    <td> 
+                                        <ul class="action"> 
+                                            <li class="edit"> <a data-bs-toggle="modal" data-bs-target="#edit_services_toggle" id="edit_prefix_service" data-id="<%= data.id %>" data-prefix="<%= data.prefix %>" data-type="<%= data.type %>"><i class="icon-pencil-alt"></i></a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            <% i++ %>
+                            <% }) %>
+                          
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc">#</th>
+                            <th id="abc"><%= lang_data.Shipping_Prefix %></th>
+                            <th id="abc"><%= lang_data.Type %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <!-- edit status modal-->
+
+        <div class="modal fade" id="edit_services_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= lang_data.Edit_Shipping_Prefix %></h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form id="service_id" method="post">
+                <div class="modal-body">
+                  <div class="row g-3">
+                    
+                    <div class="col-12">
+                      <label class="form-label"><%= lang_data.Shipping_Prefix %></label>
+                      <input class="form-control text-uppercase" type="text" id="service_name" name="prefix" placeholder="Enter Shipping Prefix" required>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label"><%= lang_data.Type %></label>
+                      <input class="form-control" type="text" id="service_details" name="type" readonly>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                  <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Clients %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Edit_Client %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/users/client"><%= lang_data.Clients %></a></li>
+                    <li class="breadcrumb-item"><a href="/users/edit_client/<%= client_data[0].id %>"><%= lang_data.Edit_Client %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/users/edit_client/<%= client_data[0].id %>" method="post">
+                        <% if (role_data.role == '1') { %>
+
+                          <div class="row mb-4">
+                            <div class="col-6">
+                              <div class="col-form-label"><%= lang_data.Customer %></div>
+                              <select class="js-example-basic-single" name="customer">
+                                <option value selected disabled>Search Customer</option>
+                                <% customer_data.forEach((data) => { %>
+                                  <option value="<%= data.id %>" <%= client_data[0].customer == data.id ? "selected" : "" %> ><%= data.first_name %> <%= data.last_name %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+
+                          <hr>
+                        <% } else { %>
+
+                          <input class="form-control" type="hidden" name="customer" value="<%= client_data[0].customer %>">
+                        <% } %>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.First_Name %></label>
+                              <input class="form-control" type="text" name="first_name" value="<%= client_data[0].first_name %>" placeholder="Enter First Name" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Last_Name %></label>
+                                <input class="form-control" type="text" name="last_name" value="<%= client_data[0].last_name %>" placeholder="Enter Last Name" required>
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.EMail %></label>
+                              <input class="form-control" type="email" name="email" value="<%= client_data[0].email %>" placeholder="Enter E-Mail" required>
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.Phone_No %></label>
+                              <input class="form-control" type="number" name="mobile" value="<%= client_data[0].mobile %>" placeholder="Enter Phone No." required>
+                            </div>
+
+                            <hr>
+
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <h5><%= lang_data.Directions %></h5>
+                                  <button class="btn btn-pill btn-primary btn-air-primary" id="btn_address" type="button"><%= lang_data.Add_Another_Address %></button>
+                              </div>
+
+                              <hr> 
+
+                              
+                              <div id="add_address">
+                                <% cuuntry.forEach((data, i) => { %>
+                                  <div class="row g-3 client_add">
+                                      <h5 id="json_Address"><%= lang_data.Address %></h5>
+
+                                      <div class="col-4">
+                                        <div class="col-form-label" id="json_Country"><%= lang_data.Country %></div>
+                                        <select class="js-example-basic-single customers_country" name="cuuntry" id="" required>
+                                            <option value selected disabled>Search Country</option>
+                                            <% countries_data.forEach((x) => { %>
+                                              <option value="<%= x.id %>" <%= data == x.id ? "selected" : "" %>><%= x.countries_name %></option>
+                                            <% }) %>
+                                        </select>
+                                      </div>
+
+                                      <div class="col-4">
+                                        <div class="col-form-label" id="json_State"><%= lang_data.State %></div>
+                                        <select class="js-example-basic-single customers_state" name="state" id="" required>
+                                            <option value selected disabled>Search State</option>
+                                            <% state_data.forEach((y) => { %>
+                                              <% if (y.countries_id == data) { %>
+
+                                                <option value="<%= y.id %>" <%= state[i] == y.id ? "selected" : "" %>><%= y.state_name %></option>
+                                              <% } %>
+                                            <% }) %>
+                                        </select>
+                                      </div>
+
+                                      <div class="col-4">
+                                        <div class="col-form-label" id="json_City"><%= lang_data.City %></div>
+                                        <select class="js-example-basic-single customers_city" name="city" id="" required>
+                                            <option value selected disabled>Search City</option>
+                                            <% city_data.forEach((z) => { %>
+                                              <% if (z.state_id == state[i]) { %>
+                                              <option value="<%= z.id %>" <%= city[i] == z.id ? "selected" : "" %>><%= z.city_name %></option>
+                                              <% } %>
+                                            <% }) %>
+                                        </select>
+                                      </div>
+
+                                      <div class="col-4">
+                                        <label class="form-label" id="json_Zip_Code"><%= lang_data.Zip_Code %></label>
+                                        <input class="form-control" type="number" name="zipcode" value="<%= zipcode[i] %>" placeholder="Enter Zip Code" required>
+                                      </div>
+
+                                      <div class="col-4">
+                                        <label class="form-label" id="json_Address"><%= lang_data.Address %></label>
+                                        <input class="form-control" type="text" name="address" value="<%= address[i] %>" placeholder="Enter Address" required>
+                                      </div>
+
+                                      <hr class="my-4">
+                                  </div>
+                                <% }) %>
+                            </div>
+
+                              <button class="btn btn-pill btn-primary btn-air-primary" type="submit"><%= lang_data.Update_Profile %></button>
+
+                        </div>
+
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

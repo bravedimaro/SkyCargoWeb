@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Drivers %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Edit_Drivers %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/users/drivers"><%= lang_data.Drivers %></a></li>
+                    <li class="breadcrumb-item"><a href="/users/edit_drivers/<%= edit_drivers_data.id %>"><%= lang_data.Edit_Drivers %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/users/edit_drivers/<%= edit_drivers_data.id %>" method="post">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.First_Name %></label>
+                                <input class="form-control" type="text" name="first_name" placeholder="Enter First Name" value="<%= edit_drivers_data.first_name %>" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Last_Name %></label>
+                                <input class="form-control" type="text" name="last_name" placeholder="Enter Last Name" value="<%= edit_drivers_data.last_name %>" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.EMail %></label>
+                                <input class="form-control" type="email" name="email" placeholder="Enter E-Mail" value="<%= edit_drivers_data.email %>" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Phone_No %></label>
+                                <input class="form-control" type="number" name="mobile" placeholder="Enter Phone No." value="<%= edit_drivers_data.mobile %>" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Vehicle_License_Plate %></label>
+                                <input class="form-control" type="text" name="vehicle_plate" placeholder="Enter Vehicle License Plate" value="<%= edit_drivers_data.vehicle_plate %>" required>
+                            </div>
+
+                            <hr>
+
+                            <div class="row mb-5">
+                                <label class="col-md-2 col-sm-3 col-form-label pb-0 pt-2"><%= lang_data.Customer_Status %></label>
+                                <div class="col-sm-9 col-xl-8">
+                                  <div class="mb-0 mt-2">
+                                    <div class="form-check form-check-inline radio radio-success">
+                                      <input class="form-check-input" id="inline-form-1" type="radio" name="active" value="1" <%= edit_drivers_data.active == "1" ? "checked" : "" %>>
+                                      <label class="form-check-label" for="inline-form-1"><%= lang_data.Active %></label>
+                                    </div>
+                                    <div class="form-check form-check-inline radio radio-danger">
+                                      <input class="form-check-input" id="inline-form-2" type="radio" name="active" value="0" <%= edit_drivers_data.active == "0" ? "checked" : "" %>>
+                                      <label class="form-check-label" for="inline-form-2"><%= lang_data.Inactive %></label>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary" type="submit"><%= lang_data.Update_Profile %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

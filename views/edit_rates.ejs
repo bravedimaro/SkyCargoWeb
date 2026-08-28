@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Rates %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Edit_Rates %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/rates"><%= lang_data.Rates %></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/edit_rates"><%= lang_data.Edit_Rates %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/settings/edit_rates/<%= rates_data.id %>" method="post">
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <div class="col-form-label"><%= lang_data.Origin %></div>
+                                <select class="js-example-basic-single" name="origin" id="rate_origin" required>
+                                    <option value selected disabled>Search Country</option>
+                                    <% countries_data.forEach((data) => { %>
+                                      <option <%= rates_data.origin == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.countries_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                              <div class="col-form-label"><%= lang_data.State %></div>
+                              <select class="js-example-basic-single" name="state" id="origin_state" required>
+                                  <option value selected disabled>Search State</option>
+                                  <% states_data.forEach((data) => { %>
+                                    <option <%= rates_data.state == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.state_name %></option>
+                                  <% }) %>
+                              </select>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="col-form-label"><%= lang_data.City %></div>
+                                <select class="js-example-basic-single" name="city" id="origin_city" required>
+                                    <option value selected disabled>Search City</option>
+                                    <% city_data.forEach((data) => { %>
+                                      <option <%= rates_data.city == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.city_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="col-form-label"><%= lang_data.Destination %> <%= lang_data.Country %></div>
+                                <select class="js-example-basic-single" name="des_country" id="rate_country" required>
+                                    <option value selected disabled>Search Destination Country</option>
+                                    <% countries_data.forEach((data) => { %>
+                                      <option <%= rates_data.des_country == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.countries_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="col-form-label"><%= lang_data.Destination %> <%= lang_data.State %></div>
+                                <select class="js-example-basic-single" name="des_state" id="rate_state" required>
+                                    <option value selected disabled>Search Destination State</option>
+                                    <% destination_states.forEach((data) => { %>
+                                      <option <%= rates_data.des_state == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.state_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="col-form-label"><%= lang_data.Destination %> <%= lang_data.City %></div>
+                                <select class="js-example-basic-single" name="des_city" id="rate_city" required>
+                                    <option value selected disabled>Search Destination City</option>
+                                    <% destination_city.forEach((data) => { %>
+                                      <option <%= rates_data.des_city == data.id ? "selected" : "" %> value="<%= data.id %>" ><%= data.city_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="validationCustom01"><%= lang_data.Start_Weight_Range %></label>
+                                <div class="input-group left-radius"><span class="input-group-text" id="inputGroupPrepend"><i class="icofont icofont-stylish-down"></i></span>
+                                    <input class="form-control" type="number" value="<%= rates_data.start_weight_range %>" name="start_weight_range" placeholder="Start Weight Range" min="0" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="validationCustom01"><%= lang_data.Ending_Weight_Range %></label>
+                                <div class="input-group left-radius"><span class="input-group-text" id="inputGroupPrepend"><i class="icofont icofont-stylish-up"></i></span>
+                                    <input class="form-control" type="number" value="<%= rates_data.end_weight_range %>" name="end_weight_range" placeholder="Ending Weight Range" min="0" step="0.01" required>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="validationCustom01"><%= lang_data.Rate_Price %></label>
+                                <input class="form-control" type="number" value="<%= rates_data.rate_price %>" name="rate_price" placeholder="Rate Price" min="0" step="0.01" required>
+                            </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Edit_Rates %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

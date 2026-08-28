@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Packaging %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Packaging %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/packaging"><%= lang_data.Type_of_packaging %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.Type_of_packaging %></h4>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#type_toggle"><%= lang_data.Add_New_Type %></button>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Packaging_Type_Name %></th>
+                            <th id="abc"><%= lang_data.Package_Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% packaging_data.forEach((data) => { %>
+
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.packaging_type %></td>
+                              <td><%= data.packaging_details %></td>
+                              <td> 
+                                <ul class="action"> 
+                                  <li class="edit"> <a data-bs-toggle="modal" data-bs-target="#edit_type_toggle" id="edit_packaging" data-id="<%= data.id %>" data-type="<%= data.packaging_type %>" data-details="<%= data.packaging_details %>"><i class="icon-pencil-alt"></i></a></li>
+                                  <li class="delete"><a href="/settings/packaging/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                          
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Packaging_Type_Name %></th>
+                            <th id="abc"><%= lang_data.Package_Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+
+        <!-- add type modal-->
+        
+        <div class="modal fade" id="type_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Add_New_Type %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/settings/packaging" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+                      
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Packaging_Type %></label>
+                        <input class="form-control" type="text" name="packaging_type" placeholder="Enter Packaging Type">
+                      </div>
+    
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Details %></label>
+                        <input class="form-control" type="text" name="packaging_details" placeholder="Enter Packaging Details">
+                      </div>
+    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+  
+          <!-- edit type modal-->
+  
+          <div class="modal fade" id="edit_type_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Edit_Type %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit_type_from" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+                      
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Packaging_Type %></label>
+                        <input class="form-control" id="packaging_type" type="text" name="packaging_type" placeholder="Enter Packaging Type">
+                      </div>
+    
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Details %></label>
+                        <input class="form-control" id="packaging_details" type="text" name="packaging_details" placeholder="Enter Packaging Details">
+                      </div>
+    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

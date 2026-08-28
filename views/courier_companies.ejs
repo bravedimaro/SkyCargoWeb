@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Courier_Companies %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Miscellaneous %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/courier_companies"><%= lang_data.List_of_Courier_Companies %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.List_of_Courier_Companies %></h4>
+                    <a href="/settings/add_courier_companies" class="btn btn-pill btn-primary btn-air-primary"><%= lang_data.Add_New_Courier_Companies %></a>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Name %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Address %></th>
+                            <th id="abc"><%= lang_data.Country %></th>
+                            <th id="abc"><%= lang_data.City %></th>
+                            <th id="abc"><%= lang_data.Postcode %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% courier_companies_data.forEach((data) => { %>
+                            
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.companies_name %></td>
+                              <td><%= data.companies_mobile %></td>
+                              <td><%= data.companies_address %></td>
+                              <td><%= data.companies_city %></td>
+                              <td><%= data.companies_country %></td>
+                              <td><%= data.companies_zipcode %></td>
+                              <td> 
+                                <ul class="action"> 
+                                  <li class="edit"> <a href="/settings/edit_courier_companies/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                  <li class="delete"><a href="/settings/courier_companies/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                          
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Name %></th>
+                            <th id="abc"><%= lang_data.Phone_No %></th>
+                            <th id="abc"><%= lang_data.Address %></th>
+                            <th id="abc"><%= lang_data.Country %></th>
+                            <th id="abc"><%= lang_data.City %></th>
+                            <th id="abc"><%= lang_data.Postcode %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.Shipping %></title>
+    <%- include('./partials/meta'); -%>
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                 
+                    <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                    <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                    <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="invo_print">
+                                    <div class="row">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <!-- logo -->
+                                            <h1 class="pt-2 f-w-700"><%= accessdata.data.site_title %></h1>
+                                        </div>
+
+                                        <hr class="mb-5">
+            
+                                        <div class="col-7">
+                                            <div>
+                                                <h5><%= lang_data.Bill_to %></h5>
+                                                <h5><%= customer_data.first_name %> <%= customer_data.last_name %></h5>
+                                            </div>
+                                            <div class="mt-4">
+                                                <% address.forEach((data, x) => { %>
+                                                    <% if (data == register_packages_data.customer_address) { %>
+
+                                                        <p class="mb-1"><%= data %></p>
+                                                        <% country_name.forEach((country_name) => { %>
+                                                            <% if (country_name.id == country[x]) { %>
+
+                                                                <% city_name.forEach((city_name) => { %>
+                                                                    <% if (city_name.id == city[x]) { %>
+                                                                        
+                                                                        <p class="mb-1"><%= country_name.countries_name %> | <%= city_name.city_name %></p>
+                                                                    <% } %>
+                                                                <% }) %>
+                                                                
+                                                            <% } %>
+                                                        <% }) %>
+                                                        <p class="mb-1"><%= customer_data.mobile %></p>
+                                                        <p class="mb-1"><%= customer_data.email %></p>
+                                                    <% } %>
+                                                <% }) %>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-5">
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Payment_Methods %> :</h6>
+                                                <h6><%= register_packages_data.payment_type_name %></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Shipping_mode %> :</h6>
+                                                <h6><%= register_packages_data.service_name %></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Courier_company %> :</h6>
+                                                <h6><%= register_packages_data.companies_name %></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Service_Mode %> :</h6>
+                                                <h6><%= register_packages_data.shipping_modes %></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Shipping_Date %> :</h6>
+                                                <h6><%= register_packages_data.date.toLocaleDateString() %></h6>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h6><%= lang_data.Tracking_ID %> # :</h6>
+                                                <h6><%= register_packages_data.invoice %></h6>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive theme-scrollbar my-5">
+                                            <table class="table" aria-label="table">
+                                                <thead class="table-dark">
+                                                    <tr>
+                                                        <th scope="col"><%= lang_data.Package_Name %></th>
+                                                        <th scope="col"><%= lang_data.Amount %></th>
+                                                        <th scope="col"><%= lang_data.Weight %></th>
+                                                        <th scope="col"><%= lang_data.Length %></th>
+                                                        <th scope="col"><%= lang_data.Width %></th>
+                                                        <th scope="col"><%= lang_data.Height %></th>
+                                                        <th scope="col"><%= lang_data.Weight_Vol %></th>
+                                                        <th scope="col"><%= lang_data.Fixed_charge %></th>
+                                                        <th scope="col"><%= lang_data.Declared_value %></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% package_name_list.forEach((data, x) => { %>
+                                                        <tr>
+                                                            <td><%= data %></td>
+                                                            <td class="invosymbol"><%= package_amount_list[x] %></td>
+                                                            <td><%= weight_list[x] %></td>
+                                                            <td><%= length_list[x] %></td>
+                                                            <td><%= width_list[x] %></td>
+                                                            <td><%= height_list[x] %></td>
+                                                            <td><%= weight_vol_list[x] %></td>
+                                                            <td class="invosymbol"><%= f_charge_list[x] %></td>
+                                                            <td class="invosymbol"><%= decvalue_list[x] %></td>
+                                                        </tr>
+                                                    <% }) %>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="col-12 mt-4">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Subtotal %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.subtotal %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Price_kg %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.add_price_kg %></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Discount %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.discount %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Total_Weight %> :</span>
+                                                        <span><%= register_packages_data.total_weight %></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Value_assured %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.add_value_assured %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Total_Weight_Vol %> :</span>
+                                                        <span><%= register_packages_data.total_weight_vol %></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Shipping_Insurance %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.shipping_insurance %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Fixed_charge %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.fixed_charge %></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Customs_Duties %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.customs_duties %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Declared_value %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.total_decvalue %></span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Tax %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.tax %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2"> 
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Declared_value %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.declared_value %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2">
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Fixed_charge %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.fixed_charge %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2">
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Reissue %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.reissue %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2">
+
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <div>
+                                                        <span class="text-nowrap m-r-15"><%= lang_data.Total %> :</span>
+                                                        <span class="invosymbol"><%= register_packages_data.total %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-2">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="text-end">
+                                        <button class="btn btn-square btn-primary btn-air-primary w-25 b-r-10" id="print_shipment" type="submit"><%= lang_data.Print %></button> 
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+        </div>
+        
+    <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

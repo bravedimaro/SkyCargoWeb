@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.Print_Label %></title>
+    <%- include('./partials/meta'); -%>
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                 
+                    <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                    <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                    <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-lg-12 d-flex justify-content-center">
+						<div class="w-50">
+							<div class="d-flex justify-content-between px-1 mb-2">
+								<button class="btn btn-square btn-primary b-r-7" type="button" onclick="history.back()"><%= lang_data.Back %></button>
+								<button class="btn btn-square btn-primary b-r-7" id="print_label_packages" type="button"><%= lang_data.Print_Label %></button>
+							</div>
+							<div class="card">
+								<div class="card-body" id="invo_print">
+									<div class="d-flex justify-content-between">
+										<div>
+											<img src="../../uploads/<%= accessdata.data.site_logo %>" alt="img">
+										</div>
+										<div>
+											<h4><%= accessdata.data.site_title %></h4>
+											<h5><%= lang_data.EMail %>: <%= admin_data[0].email %></h5>
+											<h5><%= lang_data.Phone_No %>: <%= admin_data[0].phone_no %></h5>
+										</div>
+									</div>
+									<hr>
+									<div class="d-flex justify-content-center mb-5">
+										<div class="app_print_ticket_zebra" style="height: 100px; max-width: 420px;">
+											<svg id="barcode"></svg>
+										</div>
+									</div>
+
+									<div class="mb-5">
+										<div>
+											<h5><%= lang_data.Sender_details %> :</h5>
+											<span><%= lang_data.Name %> : <%= cus_data[0].first_name %> <%= cus_data[0].last_name %> || <%= lang_data.EMail %> : <%= cus_data[0].email %> || <%= lang_data.Phone_No %> : <%= cus_data[0].mobile %></span>
+											<br>
+											<% cus_address.forEach((cus_address, x) => { %>
+												<% if (cus_address == data[0].customer_address) { %>
+													<% country.forEach((country) => { %>
+														<% if (country.id == cus_country[x]) { %>
+															<% state.forEach((state) => { %>
+																<% if (state.id == cus_state[x]) { %>
+																	<% city.forEach((city) => { %>
+																		<% if (city.id == cus_city[x]) { %>
+																			<span><%= lang_data.Address %> : <%= cus_address %> || <%= lang_data.City %> : <%= city.city_name %> || <%= lang_data.State %> : <%= state.state_name %> || <%= lang_data.Country %> : <%= country.countries_name %></span>
+																		<% } %>
+																	<% }) %>
+																<% } %>
+															<% }) %>
+														<% } %>
+													<%}) %>
+												<% } %>
+											<% }) %>
+										</div>
+										<hr>
+										<div>
+											<h5><%= lang_data.Package_Details %> :</h5>
+
+											<% if (type == '1') { %>
+												
+												<span><%= lang_data.Tracking_ID %> : #<%= data[0].invoice %> || <%= lang_data.date %> : <%= data[0].date.toLocaleDateString() %> || <%= lang_data.Purchase_price %> : <span class="invosymbol"><%= data[0].purchase_price %></span> </span>
+												<br>
+												<span><%= lang_data.Weight %> : <%= weight.toFixed(2) %> || <%= lang_data.Length %> : <%= length.toFixed(2) %> || <%= lang_data.Width %> : <%= width.toFixed(2) %> || <%= lang_data.Height %> : <%= height.toFixed(2) %> || <%= lang_data.Weight_Vol %> : <%= weight_vol.toFixed(2) %> </span>
+											<% } else if (type == '2' || type == '3') { %>
+												
+												<span><%= lang_data.Tracking_ID %> : #<%= data[0].invoice %> || <%= lang_data.date %> : <%= data[0].date.toLocaleDateString() %></span>
+												<br>
+												<span><%= lang_data.Weight %> : <%= weight.toFixed(2) %> || <%= lang_data.Length %> : <%= length.toFixed(2) %> || <%= lang_data.Width %> : <%= width.toFixed(2) %> || <%= lang_data.Height %> : <%= height.toFixed(2) %> || <%= lang_data.Weight_Vol %> : <%= weight_vol.toFixed(2) %> </span>
+												<br>
+												<span><%= lang_data.Payment_Type %> : <%= data[0].paymenttype_name %></span>
+											<% } else { %>
+
+												<span><%= lang_data.Tracking_ID %> : #<%= data[0].invoice %> || <%= lang_data.date %> : <%= data[0].date.toLocaleDateString() %></span>
+												<br>
+												<span><%= lang_data.Weight %> : <%= weight.toFixed(2) %> || <%= lang_data.Weight_Vol %> : <%= weight_vol.toFixed(2) %> </span>
+												<br>
+												<span><%= lang_data.Payment_Type %> : <%= data[0].paymenttype_name %></span>
+											<% } %>
+
+										</div>
+									</div>
+									<input type="hidden" id="hidden_invoice" value="<%= data[0].invoice %>">
+
+									<div class="d-flex justify-content-between">
+										<div>
+											<div id="qrcode"></div>
+										</div>
+										<div>
+											<h4><%= cus_data[0].first_name %> <%= cus_data[0].last_name %></h4>
+											<h5><%= cus_data[0].email %></h5>
+											<h5><%= cus_data[0].mobile %></h5>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+        </div>
+        
+    <%- include('./partials/footer'); -%>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js" integrity="sha512-QEAheCz+x/VkKtxeGoDq6nsGyzTx/0LMINTgQjqZ0h3+NjP+bCsPYz3hn0HnBkGmkIFSr7QcEZT+KyEM7lbLPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

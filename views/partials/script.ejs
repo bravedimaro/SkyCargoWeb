@@ -1,0 +1,15 @@
+<% if(success.length > 0){ %>
+    <script>
+      toastr.success('<%=success%>')
+    </script>
+  <% } %>
+  
+  <% if(errors.length > 0){ %>
+    <script>
+      toastr.error('<%=errors%>')
+    </script>
+  <% } %>
+
+
+
+<%- scriptFile %>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.consolidated %> <%= lang_data.Report %></title>
+    <%- include('./partials/meta'); -%>
+
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3><%= lang_data.Report %></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="/report/consolidated"><%= lang_data.consolidated %> <%= lang_data.Report %></a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                            
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header pb-0 d-flex justify-content-between">
+                                <h4><%= lang_data.consolidated %> <%= lang_data.Report %></h4>
+                            </div>
+                            
+                            <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                            <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                            <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                      <div class="col-form-label"><%= lang_data.Start_Date %></div>
+                                      <input class="form-control digits consolidated" type="date" id="consolidated_start_date">
+                                    </div>
+                                    
+                                    <div class="col-6">
+                                      <div class="col-form-label"><%= lang_data.End_Date %></div>
+                                      <input class="form-control digits consolidated" type="date" id="consolidated_end_date">
+                                    </div>
+                                </div>
+                                <div class="dt-ext table-responsive theme-scrollbar">
+                                    <table class="display" id="export-button" aria-label="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th>#</th>
+                                                <th><%= lang_data.Tracking %></th>
+                                                <th><%= lang_data.date %></th>
+                                                <th><%= lang_data.Sender %></th>
+                                                <th><%= lang_data.Recipient %></th>
+                                                <th><%= lang_data.Payment %></th>
+                                                <th><%= lang_data.status %></th>
+                                                <th><%= lang_data.total_cost %></th>
+                                                <th><%= lang_data.invoice_status %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="consolidated_tbody">
+                                            <% var no = 1 %>
+                                            <% consolidated_data.forEach((data) => { %>
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <td><%= no %></td>
+                                                    <td class="text-nowrap"><%= data.invoice %></td>
+                                                    <td class="text-nowrap"><%= data.date.toLocaleDateString() %></td>
+                                                    <td class="text-nowrap"><%= data.customers_firstname %> <%= data.customers_lastname %></td>
+                                                    <td class="text-nowrap"><%= data.client_firstname %> <%= data.client_lastname %></td>
+                                                    <td class="text-nowrap"><%= data.payment %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.status == 'Delivered') { %>
+                                                            <span class="badge badge-success p-2">Delivered</span>
+                                                        <% } else if (data.status == 'Cancelled') { %>
+
+                                                            <span class="badge badge-danger p-2">Cancelled</span>
+                                                        <% } else if (data.status == 'Pending') { %>
+
+                                                            <span class="badge badge-warning p-2"><%= data.status %></span>
+                                                        <% }  else { %>   
+                                                            <span class="badge badge-info p-2"><%= data.status %></span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.due_amount == "0") { %> 
+                                                            <span class="badge badge-success p-2">Paid</span>
+                                                        <% } else { %> 
+                                                            <% if (role_data.role == '1') { %>
+
+                                                                <span class="badge badge-warning p-2">Pending</span>
+                                                            <% } else { %>
+                                                                    
+                                                                <span class="badge badge-warning p-2">Charge Payment</span>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </td>
+                                                    
+                                                </tr>
+                                            <% no++ %>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+        <!-- Container-fluid Ends-->
+        </div>
+
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

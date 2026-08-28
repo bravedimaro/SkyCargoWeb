@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.Transactions %></title>
+    <%- include('./partials/meta'); -%>
+
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3><%= lang_data.Transactions %></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="transactions/accounts_receivable"><%= lang_data.List_Of_Payment %></a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                            
+                    <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                    <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                    <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header pb-0 d-flex justify-content-between">
+                                <h4><%= lang_data.List_Of_Payment %></h4>
+                            </div>
+                            <div class="card-body">
+
+                                <% if (role_data.role == 1) { %>
+                                    <div class="row mb-3">
+
+                                        <div class="col-6">
+                                            <div class="col-form-label"><%= lang_data.Customer_Name %></div>
+                                            <select class="js-example-basic-single list_of_payment" id="customer_name">
+                                              <option value selected disabled>Search Customer Name</option>
+                                              <% customer_data.forEach((data) => { %>
+                                                <option value="<%= data.id %>"><%= data.first_name %> <%= data.last_name %></option>
+                                              <% }) %>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-6">
+                                            <div class="col-form-label"><%= lang_data.Shipping_Type %></div>
+                                            <select class="js-example-basic-single list_of_payment" id="shipping_type">
+                                              <option value selected disabled>Search Shipping Type</option>
+                                              <option value="register_packages">Register Packages</option>
+                                              <option value="shipment">Shipment</option>
+                                              <option value="pickup">Pickup</option>
+                                              <option value="consolidated">Consolidated</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+                                <% } %>
+
+                                <div class="dt-ext table-responsive theme-scrollbar">
+                                    <table class="display" id="export-button" aria-label="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th><%= lang_data.No %></th>
+                                                <th><%= lang_data.Tracking_ID %></th>
+                                                <th><%= lang_data.date %></th>
+                                                <th><%= lang_data.Customers %></th>
+                                                <th><%= lang_data.Shipping_Type %></th>
+                                                <th><%= lang_data.Amount %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="add_data">
+                                            <% var number = 1 %>
+                                            <% payment_data.forEach((data) => { %>
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <td><%= number %></td>
+                                                    <td><%= data.invoice %></td>
+                                                    <td><%= data.date.toLocaleDateString() %></td>
+                                                    <td><%= data.first_name %> <%= data.last_name %></td>
+                                                    <td><%= data.type %></td>
+                                                    <td class="invosymbol"><%= data.paid_amount %></td>
+                                                </tr>
+                                            <% number++ %>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+        <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

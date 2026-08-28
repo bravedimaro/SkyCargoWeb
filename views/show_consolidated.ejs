@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.consolidated %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+
+          <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                 
+                    <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                    <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                    <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div>
+                                        <h3><span class="font-danger"> <%= lang_data.Tracking_ID %> </span>#<%= consolidated_data.invoice %></h3> 
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5><%= lang_data.Package_Status %> <span class="badge badge-primary p-2"><%= consolidated_data.shipping_status %></span></h5>
+                                        <h5><%= lang_data.invoice_status %> 
+                                            <% if (consolidated_data.due_amount == '0') { %>
+                                                <span class="badge badge-success p-2">Paid</span>
+                                            <% } else { %>
+                                                <span class="badge badge-warning p-2">Pending</span>
+                                            <% } %>
+                                        </h5>
+                                        <div>
+                                                <div class="dropdown">
+                                                        <button class="dropbtn btn-pill btn-primary px-4 py-2" type="button"><%= lang_data.Action %></button>
+                                                        <div class="dropdown-content myDropdown">
+                                                            <% if (consolidated_data.shipping_status == 'Delivered') { %>
+                                                                <a class="dropdown-item" href="/consolidated/show_consolidated/<%= consolidated_data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                <a class="dropdown-item" href="/consolidated/print_shipment/<%= consolidated_data.id %>"><i class="fa fa-print f-14"></i> <%= lang_data.Print_Shipment %></a>
+
+                                                            <% } else if (consolidated_data.shipping_status == 'Cancelled') { %>
+                                                                <a class="dropdown-item" href="/consolidated/show_consolidated/<%= consolidated_data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                <% if (consolidated_data.due_amount != '0') { %>
+                                                                    <a class="dropdown-item" href="/consolidated/edit_consolidated/<%= consolidated_data.id %>"><i class="fa fa-pencil f-14"></i> <%= lang_data.Edit_Package %></a>
+                                                                <% } %>
+                                                            <% } else { %>
+
+                                                                <a class="dropdown-item" href="/consolidated/show_consolidated/<%= consolidated_data.id %>"><i class="fa fa-search f-14"></i> <%= lang_data.Show_Details %></a>
+                                                                <% if (consolidated_data.due_amount != '0') { %>
+                                                                    <a class="dropdown-item" href="/consolidated/edit_consolidated/<%= consolidated_data.id %>"><i class="fa fa-pencil f-14"></i> <%= lang_data.Edit_Package %></a>
+                                                                <% } %>
+                                                                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#assigndriver_toggle" id="consolidated_assign_driver" data-id="<%= consolidated_data.id %>" data-name="<%= consolidated_data.assign_driver %>"><i class="fa fa-car f-14"></i> <%= lang_data.Assign_Driver %></a>
+                                                                <a class="dropdown-item" href="/consolidated/print_shipment/<%= consolidated_data.id %>"><i class="fa fa-print f-14"></i> <%= lang_data.Print_Shipment %></a>
+                                                                <a class="dropdown-item" href="/consolidated/shipment_tracking/<%= consolidated_data.id %>"><i class="fa fa-refresh f-14"></i> <%= lang_data.Shipment_Tracking %></a>
+                                                                <a class="dropdown-item" href="/consolidated/deliver_shipment/<%= consolidated_data.id %>"><i class="fa fa-cube f-14"></i> <%= lang_data.Deliver_The_Shipment %></a>
+                                                                <a class="dropdown-item" href="#"><i class="fa fa-times-circle f-14 font-danger"></i></i> <%= lang_data.Unconsolidate %></a>
+                                                            <% } %>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="mt-3">
+
+                                    <div class="col-4">
+                                        <div>
+                                            <h5><%= lang_data.Agency %></h5>
+                                            <span><%= consolidated_data.agency_name %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Estimated_delivery_date %></h5>
+                                            <span><%= consolidated_data.date.toLocaleDateString() %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Delivery_time %></h5>
+                                            <span><%= consolidated_data.deliverytime %></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div>
+                                            <h5><%= lang_data.Office %></h5>
+                                            <span><%= consolidated_data.office_group_name %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Package_Type %></h5>
+                                            <span><%= consolidated_data.packaging_name %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Payment_Methods %></h5>
+                                            <span><%= consolidated_data.payment_type_name %></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div>
+                                            <h5><%= lang_data.Shipping_Modes %></h5>
+                                            <span><%= consolidated_data.shipping_mode_name %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Courier_company %></h5>
+                                            <span><%= consolidated_data.courier_companies_name %></span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5><%= lang_data.Ship_Mode %></h5>
+                                            <span><%= consolidated_data.service_mode_name %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if (consolidated_data.delivery_status == '6') { %>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <% tracking_data.forEach((data) => { %>
+                                            <% if (data.delivery_status == '6') { %>
+
+                                                <div class="col-4">
+                                                    <div>
+                                                        <h5><%= lang_data.Delivery_Date %></h5>
+                                                        <span><%= data.date.toLocaleDateString() %> <%= data.time %></span>
+                                                    </div>
+                                                    <div class="mt-3">
+                                                        <h5><%= lang_data.Photo %></h5>
+                                                        <img id="file-preview" width="250px" height="250px" src="../../uploads/<%= data.image %>" alt="image">
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-4">
+                                                    <div>
+                                                        <h5><%= lang_data.Delivered_By %></h5>
+                                                        <span><%= accessdata.data.site_title %></span>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-4">
+                                                    <div>
+                                                        <h5><%= lang_data.Received_by %></h5>
+                                                        <span><%= data.person_receives %></span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            <% } %>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %> 
+
+                        <!-- Tracking History -->
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <h5><%= lang_data.Tracking_History %></h5>
+
+                                    <hr>
+
+                                    <div class="table-responsive theme-scrollbar">
+                                        <table class="table" aria-label="table">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th scope="col"><%= lang_data.Date_updated %></th>
+                                                    <th scope="col"><%= lang_data.Time_update %></th>
+                                                    <th scope="col"><%= lang_data.New_location %></th>
+                                                    <th scope="col"><%= lang_data.Package_Status %></th>
+                                                    <th scope="col"><%= lang_data.Remarks %></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% tracking_data.forEach((data) => { %>
+
+                                                    <tr>
+                                                        <td><%= data.date.toLocaleDateString() %></td>
+                                                        <td><%= data.time %></td>
+                                                        <td><%= data.countries_name %></td>
+                                                        <td><%= data.status_name %></td>
+                                                        <td><%= data.message %></td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <h5><%= lang_data.Shipping_details %></h5>
+
+                                    <hr>
+
+                                    <div class="table-responsive theme-scrollbar">
+                                        <table class="table" aria-label="table">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th scope="col"><%= lang_data.tracking %></th>
+                                                    <th scope="col"><%= lang_data.Weight %></th>
+                                                    <th scope="col"><%= lang_data.Weight_Vol %></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% shipment_invoice_list.forEach((data, x) => { %>
+                                                    <tr>
+                                                        <td><%= data %></td>
+                                                        <td><%= shipment_weight_list[x] %></td>
+                                                        <td><%= shipment_weight_vol_list[x] %></td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="col-12 mt-4">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Subtotal %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.subtotal %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2"> 
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Price_kg %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.add_price_kg %></span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Discount %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.discount %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2"> 
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Weight %> :</span>
+                                                    <span><%= consolidated_data.total_weight %></span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Shipping_Insurance %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.shipping_insurance %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2"> 
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Total_Weight_Vol %> :</span>
+                                                    <span><%= consolidated_data.total_weight_vol %></span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Customs_Duties %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.customs_duties %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2"> 
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Tax %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.tax %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <hr class="my-2"> 
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Reissue %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.reissue %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2">
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <div>
+                                                    <span class="text-nowrap m-r-15"><%= lang_data.Total %> :</span>
+                                                    <span class="invosymbol"><%= consolidated_data.total %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-2">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sender details -->
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <h5><%= lang_data.Sender_details %></h5>
+
+                                    <hr>
+                                    <% customers_address.forEach((data, x) => { %>
+                                        <% if (data == consolidated_data.customer_address) { %>
+                                        
+                                            <div class="col-4">
+                                                <div>
+                                                    <h5><%= lang_data.Name %></h5>
+                                                    <span><%= sender_data.first_name %> <%= sender_data.last_name %></span>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <h5><%= lang_data.Address %></h5>
+                                                    <span><%= data %></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div>
+                                                    <h5><%= lang_data.EMail %></h5>
+                                                    <span><%= sender_data.email %></span>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <h5><%= lang_data.Country %></h5>
+                                                    <% country_name.forEach((country_name) => { %>
+                                                        <% if (country_name.id == customers_country[x] ) { %>
+
+                                                            <span><%= country_name.countries_name %></span>
+                                                        <% } %>
+                                                    <% }) %>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div>
+                                                    <h5><%= lang_data.Phone_No %></h5>
+                                                    <span><%= sender_data.mobile %></span>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <h5><%= lang_data.City %></h5>
+                                                    <% city_name.forEach((city_name) => { %>
+                                                        <% if (city_name.id == customers_city[x] ) { %>
+
+                                                            <span><%= city_name.city_name %></span>
+                                                        <% } %>
+                                                    <% }) %>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                  <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+        </div>
+        
+        
+        <!-- edit status modal-->
+
+        <div class="modal fade" id="assigndriver_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Assign_Driver %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/consolidated/assigndriver" method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" id="hidden_id" name="hidden_id">
+                            <div class="col-12">
+                                <select class="js-example-basic-single" name="assign_driver" id="assign_driver_toggle" required>
+                                    <option value selected disabled>Search Driver</option>
+                                    <% drivers_list.forEach((data) => { %>
+                                    <option value="<%= data.id %>"> <%= data.first_name %> <%= data.last_name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                        <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

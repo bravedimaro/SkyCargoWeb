@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title><%= lang_data.Payment %></title>
+    <%- include('./partials/meta'); -%>
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3><%= lang_data.Add_Payment %></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="/transactions/add_payment"><%= lang_data.Payment %></a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                                
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header pb-0 d-flex justify-content-between">
+                                <h4><%= lang_data.Payment %></h4>
+                            </div>
+                            
+                            <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+                            <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+                            <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+
+                            <div class="card-body">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1" aria-label="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th><%= lang_data.Sender %></th>
+                                                <th><%= lang_data.shipment_type %></th>
+                                                <th><%= lang_data.Total_cost %></th>
+                                                <th><%= lang_data.Paid_Amount %></th>
+                                                <th><%= lang_data.Due_Amount %></th>
+                                                <th><%= lang_data.invoice_status %></th>
+                                                <th><%= lang_data.Action %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% register_packages_amount_data.forEach((data) => { %>
+
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <% customer_data.forEach((customer_data) => { %>
+                                                        <% if (customer_data.id == data.customer) { %>
+                                                            <td class="text-nowrap"><%= customer_data.first_name %> <%= customer_data.last_name %></td>
+                                                        <% } %>
+                                                    <% }) %>
+                                                    <td class="text-nowrap">Register Packages</td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_paid_amount %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_due_amount %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.total_due_amount == "0") { %> 
+                                                            <span class="badge badge-success p-2">Paid</span>
+                                                        <% } else { %>
+                                                            <span class="badge badge-warning p-2">Pending</span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td class="text-nowrap">
+                                                        <a class="btn btn-pill btn-primary payment_datalist" href="/transactions/register_packages_payment_list/<%= data.customer %>"><%= lang_data.Details %></a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                            <% shipment_amount_data.forEach((data) => { %>
+
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <% customer_data.forEach((customer_data) => { %>
+                                                        <% if (customer_data.id == data.customer) { %>
+
+                                                            <td class="text-nowrap"><%= customer_data.first_name %> <%= customer_data.last_name %></td>
+                                                        <% } %>
+                                                    <% }) %>
+                                                    <td class="text-nowrap">Shipment</td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_paid_amount %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_due_amount %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.total_due_amount == "0") { %> 
+                                                            <span class="badge badge-success p-2">Paid</span>
+                                                        <% } else { %> 
+                                                            <span class="badge badge-warning p-2">Pending</span>
+                                                        <% } %>
+                                                    </td>
+                                                    
+                                                    <td class="text-nowrap"> 
+                                                        <a class="btn btn-pill btn-primary payment_datalist" href="/transactions/shipmentd_payment_list/<%= data.customer %>"><%= lang_data.Details %></a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                            <% pickup_amount_data.forEach((data) => { %>
+
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <% customer_data.forEach((customer_data) => { %>
+                                                        <% if (customer_data.id == data.customer) { %>
+
+                                                            <td class="text-nowrap"><%= customer_data.first_name %> <%= customer_data.last_name %></td>
+                                                        <% } %>
+                                                    <% }) %>
+                                                    <td class="text-nowrap">Pickup</td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_paid_amount %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_due_amount %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.total_due_amount == "0") { %> 
+                                                            <span class="badge badge-success p-2">Paid</span>
+                                                        <% } else { %> 
+                                                            <span class="badge badge-warning p-2">Pending</span>
+                                                        <% } %>
+                                                    </td>
+                                                    <td class="text-nowrap"> 
+                                                        <a class="btn btn-pill btn-primary payment_datalist" href="/transactions/pickup_payment_list/<%= data.customer %>"><%= lang_data.Details %></a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                            <% consolidated_amount_data.forEach((data) => { %>
+
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <% customer_data.forEach((customer_data) => { %>
+                                                        <% if (customer_data.id == data.customer) { %>
+
+                                                            <td class="text-nowrap"><%= customer_data.first_name %> <%= customer_data.last_name %></td>
+                                                        <% } %>
+                                                    <% }) %>
+                                                    <td class="text-nowrap">Consolidated</td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_paid_amount %></td>
+                                                    <td class="invosymbol text-nowrap"><%= data.total_due_amount %></td>
+                                                    <td class="text-nowrap">
+                                                        <% if (data.total_due_amount == "0") { %> 
+                                                            <span class="badge badge-success p-2">Paid</span>
+                                                        <% } else { %> 
+                                                            <span class="badge badge-warning p-2">Pending</span>
+                                                        <% } %>
+                                                    </td>
+                                                    
+                                                    <td class="text-nowrap"> 
+                                                        <a class="btn btn-pill btn-primary payment_datalist" href="/transactions/consolidated_payment_list/<%= data.customer %>"><%= lang_data.Details %></a>
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+        <!-- Container-fluid Ends-->
+        </div>
+
+        
+        <!-- edit payment modal-->
+
+        <div class="modal fade" id="add_payment_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Add_Payment %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="payment_action" method="post">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label"><%= lang_data.Tracking_ID %></label>
+                                <input class="form-control" type="text" name="invoice" id="invoice" readonly>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label"><%= lang_data.Payable_Amount %></label>
+                                <input class="form-control" type="number" name="payable_amount" step="0.01" id="payable_amount" readonly>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label"><%= lang_data.Paid_Amount %></label>
+                                <input class="form-control" type="number" name="paid_amount" step="0.01" id="paid_amount" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                        <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                    </div>
+                </form>
+              </div>
+            </div>
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

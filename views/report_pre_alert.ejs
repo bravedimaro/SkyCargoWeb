@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Pre_Alert %> <%= lang_data.Report %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Report %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/report/pre_alert"><%= lang_data.Pre_Alert %> <%= lang_data.Report %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row"> 
+              
+              <input type="hidden" id="rates_sym" value="<%= accessdata.data.site_currency %>">
+              <input type="hidden" id="rates_pla" value="<%= accessdata.data.currency_placement %>">
+              <input type="hidden" id="thousands_replace" value="<%= accessdata.data.thousands_separator %>">
+              
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0">
+                    <h4><%= lang_data.Pre_Alert %> <%= lang_data.Report %></h4>
+                  </div>
+                  <div class="card-body">
+                    
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <div class="col-form-label"><%= lang_data.Start_Date %></div>
+                        <input class="form-control digits prealert_report" type="date" id="start_date">
+                      </div>
+                      
+                      <div class="col-6">
+                        <div class="col-form-label"><%= lang_data.End_Date %></div>
+                        <input class="form-control digits prealert_report" type="date" id="end_date">
+                      </div>
+                    </div>
+
+                    <div class="dt-ext table-responsive theme-scrollbar">
+                      <table class="display" id="export-button" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc">#</th>
+                            <th id="abc"><%= lang_data.date %></th>
+                            <th id="abc"><%= lang_data.Purchase_Tracking %></th>
+                            <th id="abc"><%= lang_data.Customer_Name %></th>
+                            <th id="abc"><%= lang_data.Shipping_Company %></th>
+                            <th id="abc"><%= lang_data.Purchase_price %></th>
+                            <th id="abc"><%= lang_data.Status %></th>
+                          </tr>
+                        </thead>
+                        <tbody id="report_pa">
+                          <% var no = 1 %>
+                          <% pre_alert_data.forEach((data) => { %>
+                            <tr>
+                                <td class="d-none"></td>
+                                <td><%= no %></td>
+                                <td class="text-nowrap"><%= data.date.toLocaleDateString() %></td>
+                                <td class="text-nowrap"><%= data.tracking %></td>
+                                <td class="text-nowrap"><%= data.customer_firstname %> <%= data.customer_lastname %></td>
+                                <td class="text-nowrap"><%= data.company %></td>
+                                <td class="invosymbol"><%= data.purchase_price %></td>
+                                <td class="text-nowrap">
+                                    <% if (data.status == "Pending") { %>
+                                        <span class="badge badge-danger p-2">Pending</span>
+                                    <% } else { %>
+                                        <span class="badge badge-success p-2">Approved</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                          <% no++ %>
+                          <% }) %>
+                        </tbody>
+                        <tfoot id="report_pa_foot">
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc">#</th>
+                            <th id="abc"><%= lang_data.date %></th>
+                            <th id="abc"><%= lang_data.Purchase_Tracking %></th>
+                            <th id="abc"><%= lang_data.Customer_Name %></th>
+                            <th id="abc"><%= lang_data.Shipping_Company %></th>
+                            <th id="abc"><%= lang_data.Purchase_price %></th>
+                            <th id="abc"><%= lang_data.Status %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

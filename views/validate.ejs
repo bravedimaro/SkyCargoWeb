@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta http-equiv="Content-Type" content="">
+  <meta http-equiv="X-UA-Compatible" content="">
+  <meta name="viewport" content="">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/uploads/<%= data[0].site_logo %>" type="image/x-icon">
+  <link rel="shortcut icon" href="/uploads/<%= data[0].site_logo %>" type="image/x-icon">
+  <title><%= data[0].site_title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/vendors/font-awesome.css">
+  <!-- ico-font-->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/icofont.css">
+  <!-- Themify icon-->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/themify.css">
+  <!-- Flag icon-->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/flag-icon.css">
+  <!-- Feather icon-->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/feather-icon.css">
+  <link rel="stylesheet" type="text/css" href="/css/vendors/scrollbar.css">
+  <!-- <link rel="stylesheet" type="text/css" href="../css/vendors/animate.css"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="../css/vendors/chartist.css"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="../css/vendors/prism.css"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="../css/vendors/vector-map.css"> -->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/datatables.css">
+  <link rel="stylesheet" type="text/css" href="/css/vendors/sweetalert2.css">
+  <!-- Bootstrap css-->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/bootstrap.css">
+  <!-- App css-->
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link id="color" rel="stylesheet" href="css/color-1.css" media="screen">
+  <!-- Responsive css-->
+  <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+
+  <!-- toster jqury link -->
+  <link rel="stylesheet" href="/css/toastr.min.css"/>
+  <script src="/js/tostify/jquery-1.9.1.min.js"></script>
+  <script src="/js/tostify/js-toastr.js"></script>
+</head>
+<body>
+    <!-- Loader starts-->
+    <div class="loader-wrapper">
+      <div class="loader-box">
+        <div class="loader-19"></div>
+      </div>
+    </div>
+    <!-- Loader ends-->
+    <!-- login page start-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12 p-0">    
+          <div class="login-card">
+            <div>
+              <div><a class="logo" href="/"><img class="img-fluid for-light img-75 m-r-15" src="/uploads/<%= data[0].site_logo %>" alt="looginpage"><h1 class="f-24 f-w-900 font-dark pt-2 text-center"><%= data[0].site_title %></h1></a></div>
+
+              <div class="login-main"> 
+                <div class="theme-form" action="/" method="post" id="login_form">
+                    <div id="getmsg"></div>
+                  <h4 class="text-center">Validate your account</h4>
+                  <p class="text-center">Enter your Envato Purchase Code</p>
+                  
+                  <div class="form-group">
+                                            <label class="mb-1"><strong>Enter Envato Purchase Code</strong></label>
+                                            <input type="text" class="form-control" placeholder="Enter Envato Purchase Code"  id="inputCode" required>
+                                        </div>
+                  
+                  
+                 
+                  <button class="btn btn-primary btn-block btn-square b-r-10 w-100 mt-3" id="sub_activate">Validate My Account</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

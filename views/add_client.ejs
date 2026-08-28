@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Client %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Add_Client %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/users/client"><%= lang_data.Client %></a></li>
+                    <li class="breadcrumb-item"><a href="/users/add_client"><%= lang_data.Add_Client %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                      <form action="/users/add_client" method="post">
+                        <% if (role_data.role == '1') { %>
+
+                          <div class="row mb-4">
+                            <div class="col-6">
+                              <div class="col-form-label"><%= lang_data.Customer %></div>
+                              <select class="js-example-basic-single" name="customer">
+                                <option value selected disabled>Search Customer</option>
+                                <% customer_data.forEach((data) => { %>
+                                  <option value="<%= data.id %>"><%= data.first_name %> <%= data.last_name %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+
+                          <hr>
+                        <% } else { %>
+
+                          <input class="form-control" type="hidden" name="customer" value="<%= role_data.id %>">
+                        <% } %>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.First_Name %></label>
+                              <input class="form-control" type="text" name="first_name" placeholder="Enter First Name" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label"><%= lang_data.Last_Name %></label>
+                                <input class="form-control" type="text" name="last_name" placeholder="Enter Last Name" required>
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.EMail %></label>
+                              <input class="form-control" type="email" name="email" placeholder="Enter E-Mail" required>
+                            </div>
+
+                            <div class="col-6">
+                              <label class="form-label"><%= lang_data.Phone_No %></label>
+                              <input class="form-control" type="number" name="mobile" placeholder="Enter Phone No." required>
+                            </div>
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><%= lang_data.Directions %></h5>
+                                <button class="btn btn-pill btn-primary btn-air-primary" id="btn_address" type="button"><%= lang_data.Add_Another_Address %></button>
+                            </div>
+
+                            <hr> 
+
+                            
+                            <div id="add_address">
+                                <div class="row g-3 client_add">
+
+                                    <h5 id="json_Address"><%= lang_data.Address %></h5>
+
+                                    <div class="col-4">
+                                      <div class="col-form-label" id="json_Country"><%= lang_data.Country %></div>
+                                      <select class="js-example-basic-single customers_country" name="country" id="" required>
+                                          <option value selected disabled>Search Country</option>
+                                          <% countries_data.forEach((data) => { %>
+                                            <option value="<%= data.id %>"><%= data.countries_name %></option>
+                                          <% }) %>
+                                      </select>
+                                    </div>
+
+                                    <div class="col-4">
+                                      <div class="col-form-label" id="json_State"><%= lang_data.State %></div>
+                                      <select class="js-example-basic-single customers_state" name="state" id="" required>
+                                          <option value selected disabled>Search State</option>
+                                          <!-- ajax -->
+                                      </select>
+                                    </div>
+
+                                    <div class="col-4">
+                                      <div class="col-form-label" id="json_City"><%= lang_data.City %></div>
+                                      <select class="js-example-basic-single customers_city" name="city" id="" required>
+                                          <option value selected disabled>Search City</option>
+                                          <!-- ajax -->
+                                      </select>
+                                    </div>
+
+                                    <div class="col-4">
+                                      <label class="form-label" id="json_Zip_Code"><%= lang_data.Zip_Code %></label>
+                                      <input class="form-control" type="number" name="zipcode" placeholder="Enter Zip Code" required>
+                                    </div>
+
+                                    <div class="col-4">
+                                      <label class="form-label" id="json_Address"><%= lang_data.Address %></label>
+                                      <input class="form-control" type="text" name="address" placeholder="Enter Address" required>
+                                    </div>
+
+                                    <hr class="my-4">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-pill btn-primary btn-air-primary" type="submit"><%= lang_data.Update_Profile %></button>
+
+                        </div>
+                      </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

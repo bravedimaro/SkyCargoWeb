@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Office_Group %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Add_Offices %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/office_group"><%= lang_data.List_of_Offices %></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/add_office_group"><%= lang_data.Add_Offices %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/settings/add_office_group" method="post">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Office_Name %></label>
+                                    <input class="form-control" type="text" name="office_name" placeholder="Enter Office Name" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Office_Code %></label>
+                                    <input class="form-control" type="text" name="office_code" placeholder="Enter Office Code" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Address %></label>
+                                    <input class="form-control" type="text" name="office_address" placeholder="Enter Office Address" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.City %></label>
+                                    <input class="form-control" type="text" name="office_city" placeholder="Enter City Name" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label"><%= lang_data.Phone_No %></label>
+                                    <input class="form-control" type="number" name="office_mobile" placeholder="Enter Office Phone No." required>
+                                </div>
+
+                                <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Add_Offices %></button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

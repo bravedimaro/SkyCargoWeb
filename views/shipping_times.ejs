@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Shipping_Times %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Shipping_Times %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/shipping_times"><%= lang_data.List_Of_Shipping_Times %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+             
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.List_Of_Shipping_Times %></h4>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#times_toggle"><%= lang_data.Add_New_Times %></button>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Delivery_Time %></th>
+                            <th id="abc"><%= lang_data.Delivery_Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% shipping_times_data.forEach((data) => { %>
+                          
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.shipping_times %></td>
+                              <td><%= data.shipping_details %></td>
+                              <td> 
+                                <ul class="action"> 
+                                  <li class="edit"> <a data-bs-toggle="modal" data-bs-target="#edit_times_toggle" id="edit_shipping_times" data-id="<%= data.id %>" data-times="<%= data.shipping_times %>" data-details="<%= data.shipping_details %>"><i class="icon-pencil-alt"></i></a></li>
+                                  <li class="delete"><a href="/settings/shipping_times/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Delivery_Time %></th>
+                            <th id="abc"><%= lang_data.Delivery_Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+
+        <!-- add Times modal-->
+        
+        <div class="modal fade" id="times_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Add_New_Times %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/settings/shipping_times" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+                      
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Delivery_Time %></label>
+                        <input class="form-control" type="text" name="shipping_times" placeholder="Enter Delivery Times">
+                      </div>
+    
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Delivery_Details %></label>
+                        <input class="form-control" type="text" name="shipping_details" placeholder="Enter Delivery Details">
+                      </div>
+    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+  
+          <!-- edit Times modal-->
+  
+          <div class="modal fade" id="edit_times_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"><%= lang_data.Edit_Times %></h5>
+                  <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="shipping_id" method="post">
+                  <div class="modal-body">
+                    <div class="row g-3">
+                      
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Delivery_Time %></label>
+                        <input class="form-control" id="shipping_times" type="text" name="shipping_times" placeholder="Enter Delivery Times">
+                      </div>
+    
+                      <div class="col-12">
+                        <label class="form-label"><%= lang_data.Delivery_Details %></label>
+                        <input class="form-control" id="shipping_details" type="text" name="shipping_details" placeholder="Enter Delivery Details">
+                      </div>
+    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

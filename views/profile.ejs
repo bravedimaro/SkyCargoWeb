@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Profile %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Profile %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/index/profile"><%= lang_data.Profile %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+            
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-12">
+                <form class="card" action="/index/profile/<%= data.id %>" method="post">
+                  <div class="card-header pb-0">
+                    <h4 class="card-title mb-0"><%= lang_data.Profile %></h4>
+                    <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="mb-3">
+                          <label class="form-label f-w-500"><%= lang_data.First_Name %></label>
+                            <input class="form-control" type="text" placeholder="Enter First Name" name="first_name" value="<%= data.first_name %>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-3">
+                          <label class="form-label f-w-500"><%= lang_data.Last_Name %></label>
+                          <input class="form-control" type="text" placeholder="Enter Last Name" name="last_name" value="<%= data.last_name %>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-3">
+                          <label class="form-label f-w-500"><%= lang_data.EMail %></label>
+                          <input class="form-control" type="email" placeholder="Enter Email" name="email" value="<%= data.email %>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-3">
+                          <label class="form-label f-w-500"><%= lang_data.Phone_No %></label>
+                          <input class="form-control" type="number" placeholder="Enter Phone No." name="phone_no" value="<%= data.phone_no %>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="mb-3">
+                          <label class="form-label f-w-500"><%= lang_data.Password %></label>
+                          <input class="form-control" type="password" placeholder="Enter New Password" name="password">
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <div class="card-footer text-end">
+                    <button class="btn btn-primary" type="submit"><%= lang_data.Update_Profile %></button>
+                  </div>
+                </form>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

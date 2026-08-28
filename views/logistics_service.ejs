@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <title><%= lang_data.Logistics_Service %></title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%= lang_data.Miscellaneous %></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/settings/logistics_service"><%= lang_data.List_Of_Logistics_Services %></a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+            
+              <!-- Scroll - vertical dynamic Starts-->
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header pb-0 d-flex justify-content-between">
+                    <h4><%= lang_data.List_Of_Logistics_Services %></h4>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#services_toggle"><%= lang_data.Add_New_Services %></button>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive theme-scrollbar">
+                      <table class="display" id="basic-12" aria-label="table">
+                        <thead>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Logistics_Service %></th>
+                            <th id="abc"><%= lang_data.Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% logistics_service_data.forEach((data) => { %>
+                            
+                            <tr>
+                              <td class="d-none"></td>
+                              <td><%= data.service_name %></td>
+                              <td><%= data.service_details %></td>
+                              <td> 
+                                <ul class="action"> 
+                                  <li class="edit"> <a data-bs-toggle="modal" data-bs-target="#edit_services_toggle" id="edit_logistics_service" data-id="<%= data.id %>" data-name="<%= data.service_name %>" data-details="<%= data.service_details %>"><i class="icon-pencil-alt"></i></a></li>
+                                  <li class="delete"><a href="/settings/logistics_service/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                </ul>
+                              </td>
+                            </tr>
+                          <% }) %>
+                          
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th id="abc" class="d-none"></th>
+                            <th id="abc"><%= lang_data.Logistics_Service %></th>
+                            <th id="abc"><%= lang_data.Details %></th>
+                            <th id="abc"><%= lang_data.Action %></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scroll - vertical dynamic Ends-->
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <!-- add status modal-->
+        
+        <div class="modal fade" id="services_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= lang_data.Add_New_Services %></h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/settings/logistics_service" method="post">
+                <div class="modal-body">
+                  <div class="row g-3">
+                    
+                    <div class="col-12">
+                      <label class="form-label"><%= lang_data.Logistics_Service %></label>
+                      <input class="form-control" type="text" name="service_name" placeholder="Enter Service Name" required>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label"><%= lang_data.Details %></label>
+                      <input class="form-control" type="text" name="service_details" placeholder="Enter Service Details" required>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                  <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- edit status modal-->
+
+        <div class="modal fade" id="edit_services_toggle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= lang_data.Edit_Services %></h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form id="service_id" method="post">
+                <div class="modal-body">
+                  <div class="row g-3">
+                    
+                    <div class="col-12">
+                      <label class="form-label"><%= lang_data.Logistics_Service %></label>
+                      <input class="form-control" type="text" id="service_name" name="service_name" placeholder="Enter Service Name" required>
+                    </div>
+
+                    <div class="col-12">
+                      <label class="form-label" for="validationCustom01"><%= lang_data.Details %></label>
+                      <input class="form-control" type="text" id="service_details" name="service_details" placeholder="Enter Service Details" required>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%= lang_data.Close %></button>
+                  <button class="btn btn-primary" type="submit"><%= lang_data.Save_changes %></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+  </body>
+
+</html>

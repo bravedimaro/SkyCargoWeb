@@ -1,0 +1,79 @@
+    <meta http-equiv="Content-Type" content="">
+    <meta http-equiv="X-UA-Compatible" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../uploads/<%= accessdata.data.site_logo %>" type="image/x-icon">
+    <link rel="shortcut icon" href="../../uploads/<%= accessdata.data.site_logo %>" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/font-awesome.css">
+    <!-- ico-font-->
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/icofont.css">
+    <!-- Themify icon-->
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/themify.css">
+    <!-- Flag icon-->
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/flag-icon.css">
+    <!-- Feather icon-->
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/animate.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/datatables.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/select2.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/date-picker.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/sweetalert2.css">
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css">
+    <!-- App css-->
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <link id="color" rel="stylesheet" href="../../css/color-1.css" media="screen">
+    <!-- Responsive css-->
+    <link rel="stylesheet" type="text/css" href="../../css/responsive.css">
+
+    <!-- toster jqury link -->
+	<link rel="stylesheet" href="../../css/toastr.min.css"/>
+	<script src="../../js/tostify/jquery-1.9.1.min.js"></script>
+	<script src="../../js/tostify/js-toastr.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P47YT3Y75E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P47YT3Y75E');
+</script>
+    
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
+    <script>
+        if ('<%= role_data.role %>' == '1') {
+            var type = 'admin'
+        } else if ('<%= role_data.role %>' == '2') {
+            var type = 'customer'
+        } else if ('<%= role_data.role %>' == '3') {
+            var type = 'driver'
+        }
+        
+        let page_topic = type
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+          OneSignal.init({
+              appId: "<%= accessdata.data.onesignal_app_id %>",
+            });
+            OneSignal.on('subscriptionChange', function(isSubscribed) {
+                if (isSubscribed === true) {
+                    console.log('The user subscription state is now:', isSubscribed);
+                    var pathArray = window.location.pathname.split('/');
+                    OneSignal.sendTags({
+                        "Login_ID": '<%= role_data.id %>',
+                        "subscription_user_Type": page_topic,
+                    }).then(function(tagsSent) {
+                        // Callback called when tags have finished sending
+                        console.log("tagsSent", tagsSent);
+                    });
+                }
+            });
+        });
+    </script>

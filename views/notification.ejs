@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.Notification %></title>
+    <%- include('./partials/meta'); -%>
+
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3><%= lang_data.Notification %></h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="/settings/notification"><%= lang_data.Notification %></a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                            
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1" aria-label="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th><%= lang_data.date %></th>
+                                                <th><%= lang_data.Sender %></th>
+                                                <th><%= lang_data.Notification %></th>
+                                                <th><%= lang_data.Action %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% data.forEach((data) => { %>
+                                                <tr>
+                                                    <td class="d-none"></td>
+                                                    <td><%= data.date.toLocaleDateString() %> <%= data.time %></td>
+                                                    <td><%= data.firstname %> <%= data.lastname %></td>
+                                                    <td><%= data.notification %></td>
+                                                    <td>
+                                                        <% if (data.type == '1') { %>
+                                                            <% register_packages_notification.forEach((register_data) => { %>
+                                                                <% if (register_data.invoice == data.invoice) { %>
+                                                                    <a class="register_data" href="/online_shopping/show_register_packages/<%= register_data.id %>"><i class="fa fa-eye f-20"></i></a>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        <% } %>
+
+                                                        <% if (data.type == '2') { %>
+                                                            <% shipment_notification.forEach((shipment_data) => { %>
+                                                                <% if (shipment_data.invoice == data.invoice) { %>
+                                                                    <a class="badge badge-primary rounded" href="/shipping/show_create_shipment/<%= shipment_data.id %>"><i class="fa fa-truck f-20"></i> #<%= shipment_data.id %></a>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        <% } %>
+
+                                                        <% if (data.type == '3') { %>
+                                                            <% pickup_notification.forEach((pickup_data) => { %>
+                                                                <% if (pickup_data.invoice == data.invoice) { %>
+                                                                    <a class="pickup_data" href="/pickup/show_pickup/<%= pickup_data.id %>"><i class="fa fa-eye f-20"></i></a>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        <% } %>
+
+                                                        <% if (data.type == '4') { %>
+                                                            <% consolidated_notification.forEach((consolidated_data) => { %>
+                                                                <% if (consolidated_data.invoice == data.invoice) { %>
+                                                                    <a class="consolidated_data" href="/consolidated/show_consolidated/<%= consolidated_data.id %>"><i class="fa fa-eye f-20"></i></a>
+                                                                <% } %>
+                                                            <% }) %>
+                                                        <% } %>
+
+                                                        <% if (data.type == '5') { %>
+                                                            <a class="other" href="/online_shopping/pre_alert"><i class="fa fa-eye f-20"></i></a>
+                                                        <% } %>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+        <!-- Container-fluid Ends-->
+        </div>
+        
+        <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <title><%= lang_data.shipments %></title>
+    <%- include('./partials/meta'); -%>
+</head>
+<body>
+    <%- include('./partials/header_sidebar'); -%> 
+
+        <div class="page-body">
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                 
+                    <!-- Scroll - vertical dynamic Starts-->
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="/shipping/shipment_tracking/<%= shipment_data.id %>" method="post">
+                                    <div class="row g-3">
+                                    
+                                        <h4><span class="font-danger"> <%= lang_data.Shipment_Tracking %> </span> | <%= shipment_data.invoice %></h4>
+
+                                        <hr>
+
+                                        <div class="col-6">
+                                            <div class="col-form-label"><%= lang_data.New_location %></div>
+                                            <select class="js-example-basic-single" name="location" required>
+                                                <option value selected disabled>Search Country</option>
+                                                <% countries_data.forEach((data) => { %>
+                                                  <option value="<%= data.id %>"><%= data.countries_name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label"><%= lang_data.City_Or_Address %></label>
+                                            <input class="form-control" type="text" placeholder="City or address" name="address" required>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="col-form-label"><%= lang_data.Office %></div>
+                                            <select class="js-example-basic-single" name="office" required>
+                                              <option value selected disabled>Search Office</option>
+                                              <% office.forEach((data) => { %>
+                                                <option value="<%= data.id %>"> <%= data.office_name %></option>
+                                              <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="col-form-label"><%= lang_data.Delivery_Status %></div>
+                                            <select class="js-example-basic-single" name="delivery_status" required>
+                                              <option value selected disabled>Search Status</option>
+                                              <% shipping_status_data.forEach((data) => { %>
+                                                <option value="<%= data.id %>"> <%= data.status_name %></option>
+                                              <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label"><%= lang_data.Ship_Date %></label>
+                                            <div class="input-group left-radius"><span class="input-group-text" id="inputGroupPrepend"><i data-feather="calendar"></i></span>
+                                              <input class="form-control digits" id="minMaxExample" type="text" name="date" placeholder="MM/DD/YYYY" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label"><%= lang_data.Message %></label>
+                                            <input class="form-control" type="text" name="message" placeholder="Enter Message">
+                                        </div>
+
+                                        <hr class="mt-5">
+
+                                        <div class="col-12">
+                                            <div class="text-end">
+                                                <button class="btn btn-square btn-primary btn-air-primary w-25 b-r-10" type="submit"><%= lang_data.Add_Shipment_Tracking %></button> 
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scroll - vertical dynamic Ends-->
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+        </div>
+        
+    <%- include('./partials/footer'); -%>
+        
+    <%- include('./partials/script'); -%>
+
+</body>
+
+</html>
