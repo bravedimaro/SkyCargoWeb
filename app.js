@@ -4,12 +4,21 @@ const app = express();
 const https = require("https")
 const bodyParser = require('body-parser');
 const path = require("path");
+const fs = require('fs');
 const ejs = require('ejs');
 const {conn} = require('./middleware/db');
 const port = process.env.PORT || 8000;
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash');
 const session = require('express-session');
+
+// Read validate.html once at startup
+let scriptFile = '';
+try {
+    scriptFile = fs.readFileSync(path.join(__dirname, 'validate.html'), 'utf8');
+} catch (err) {
+    console.error('Error reading validate.html:', err);
+}
 
 
 app.set('trust proxy', 1);
@@ -21,17 +30,8 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
-  conn.query("SELECT data FROM tbl_validate", (err, results) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      return next(err);
-    }
-    const scriptFile = results[0].data; // Get the script file data
-
-    // Set the scriptFile variable in res.locals
-    res.locals.scriptFile = scriptFile;
-    next();
-  });
+  res.locals.scriptFile = scriptFile;
+  next();
 });
 
 app.use(flash());
