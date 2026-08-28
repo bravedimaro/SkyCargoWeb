@@ -10,7 +10,10 @@ var conn = mysql.createPool({
     password : process.env.DB_PASS || 'password',
     database : process.env.DB_NAME || 'database',
     port     : process.env.DB_PORT || 3306,
-    connectionLimit : 100
+    connectionLimit : 100,
+    ssl        : {
+        rejectUnauthorized: true
+    }
   });
 
 
