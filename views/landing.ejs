@@ -22,6 +22,18 @@
     .brand img{height:42px;width:auto;object-fit:contain}
     .nav-links{display:flex;align-items:center;gap:28px;font-weight:600;color:var(--muted)}
     .nav-links a:hover{color:var(--brand)}
+    /* mobile menu */
+    .nav-toggle{display:none;background:transparent;border:0;width:44px;height:44px;border-radius:10px;align-items:center;justify-content:center;color:var(--brand);font-size:20px;cursor:pointer}
+    .nav-toggle:hover{background:#f1f5f9}
+    .mobile-menu{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:90;opacity:0;transition:opacity .2s}
+    .mobile-menu.open{display:flex;opacity:1}
+    .mobile-menu__panel{position:absolute;right:0;top:0;bottom:0;width:min(86vw,340px);background:#fff;padding:24px 22px;display:flex;flex-direction:column;gap:6px;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto}
+    .mobile-menu.open .mobile-menu__panel{transform:translateX(0)}
+    .mobile-menu__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #eef2f7}
+    .mobile-menu__close{background:transparent;border:0;font-size:22px;color:var(--ink);cursor:pointer;padding:6px 10px}
+    .mobile-menu a{display:block;padding:13px 12px;border-radius:10px;color:var(--ink);font-weight:600;font-size:16px}
+    .mobile-menu a:hover{background:#f1f5f9;color:var(--brand)}
+    .mobile-menu .btn{margin-top:8px;justify-content:center;width:100%}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;font-weight:700;transition:.2s;border:0;cursor:pointer}
     .btn-primary{background:var(--brand2);color:#fff}
     .btn-primary:hover{background:var(--brand)}
@@ -86,7 +98,37 @@
     .foot .brand{color:#fff}
     .foot a:hover{color:#fff}
     .foot-links{display:flex;gap:22px;font-weight:600}
-    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.contact-form .row-2{grid-template-columns:1fr}.nav-links{display:none}.hero h1{font-size:34px}}
+    @media(max-width:900px){
+      .container{padding:0 18px}
+      header .container{padding:0 18px}
+      .nav-links{display:none}
+      .nav-toggle{display:inline-flex}
+      .hero{padding:64px 0 70px}
+      .hero-grid{grid-template-columns:1fr;gap:32px}
+      .hero h1{font-size:30px;line-height:1.2}
+      .hero p{font-size:16px}
+      .hero-cta{flex-direction:column;align-items:stretch}
+      .hero-cta .btn{width:100%;justify-content:center}
+      .hero-stats{flex-wrap:wrap;gap:18px 26px}
+      .hero-stats b{font-size:22px}
+      .grid-3{grid-template-columns:1fr;gap:18px}
+      .steps{grid-template-columns:repeat(2,1fr);gap:20px}
+      .step{padding:0 4px}
+      .sec-head h2{font-size:26px}
+      .sec-head p{font-size:15px}
+      section{padding:56px 0}
+      .cta{padding:38px 22px;border-radius:16px}
+      .cta h2{font-size:24px}
+      .contact-card{padding:24px 18px}
+      .contact-form .row-2{grid-template-columns:1fr}
+      .foot{flex-direction:column;align-items:flex-start;gap:14px;text-align:left}
+      .foot-links{flex-wrap:wrap;gap:14px 18px}
+    }
+    @media(max-width:520px){
+      .steps{grid-template-columns:1fr}
+      .hero h1{font-size:26px}
+      .brand span{display:none}
+    }
   </style>
 </head>
 <body>
@@ -100,15 +142,38 @@
         <a href="#features">Services</a>
         <a href="#how">How it works</a>
         <a href="/tracking">Track</a>
+        <a href="#contact">Contact</a>
         <% if (data.customer_login_enabled == 1) { %>
           <a href="/platformcustomer">Login</a>
           <a class="btn btn-primary" href="/sign_up">Get Started</a>
         <% } else { %>
           <a class="btn btn-primary" href="/tracking">Track Shipment</a>
         <% } %>
+        <button class="nav-toggle" type="button" id="navToggle" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </nav>
     </div>
   </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu__panel">
+      <div class="mobile-menu__head">
+        <span style="font-weight:800;color:var(--brand)"><%= data.site_title %></span>
+        <button class="mobile-menu__close" type="button" id="mobileClose" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <a href="#features">Services</a>
+      <a href="#how">How it works</a>
+      <a href="/tracking">Track Shipment</a>
+      <a href="#contact">Contact</a>
+      <% if (data.customer_login_enabled == 1) { %>
+        <a href="/platformcustomer">Login</a>
+        <a class="btn btn-primary" href="/sign_up" style="margin-top:10px">Get Started</a>
+      <% } else { %>
+        <a class="btn btn-primary" href="/tracking" style="margin-top:10px">Track Shipment</a>
+      <% } %>
+    </div>
+  </div>
 
   <section class="hero">
     <div class="container hero-grid">
@@ -251,6 +316,26 @@
   </footer>
 
   <script>
+    (function() {
+      var menu = document.getElementById('mobileMenu');
+      var open = document.getElementById('navToggle');
+      var close = document.getElementById('mobileClose');
+      if (!menu || !open || !close) return;
+
+      function setOpen(isOpen) {
+        menu.classList.toggle('open', isOpen);
+        menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        open.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      }
+
+      open.addEventListener('click', function() { setOpen(true); });
+      close.addEventListener('click', function() { setOpen(false); });
+      menu.addEventListener('click', function(e) { if (e.target === menu) setOpen(false); });
+      menu.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', function() { setOpen(false); }); });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') setOpen(false); });
+    })();
+
     (function() {
       var form = document.getElementById('contactForm');
       if (!form) return;
