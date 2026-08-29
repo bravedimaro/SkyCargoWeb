@@ -138,7 +138,7 @@
         <img src="<%= imgUrl(data.site_logo) %>" alt="<%= data.site_title %>">
         <span><%= data.site_title %></span>
       </a>
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Main navigation">
         <a href="#features">Services</a>
         <a href="#how">How it works</a>
         <a href="/tracking">Track</a>
@@ -149,10 +149,10 @@
         <% } else { %>
           <a class="btn btn-primary" href="/tracking">Track Shipment</a>
         <% } %>
-        <button class="nav-toggle" type="button" id="navToggle" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
-          <i class="fa-solid fa-bars"></i>
-        </button>
       </nav>
+      <button class="nav-toggle" type="button" id="navToggle" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
   </header>
 
