@@ -42,7 +42,7 @@ router.post("/general_settings", auth, upload.single('site_logo'), async(req, re
 
         const {site_title, site_currency, site_timezone, currency_placement, thousands_separator, site_logo_hidden, onesignal_app_id, onesignal_api_key, twilio_sid, twilio_auth_token, twilio_phone_no} = req.body
 
-        if (site_logo_hidden == 0) {
+        if (!req.file) {
 
             let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}',
             thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}',
@@ -50,11 +50,6 @@ router.post("/general_settings", auth, upload.single('site_logo'), async(req, re
             await mySqlQury(query)
 
         } else {
-            if (!req.file) {
-                req.flash('errors', `No image file was received.`)
-                return res.redirect("/settings/general_settings")
-            }
-
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
                 return res.redirect("/settings/general_settings")

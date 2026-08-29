@@ -1008,7 +1008,7 @@ router.post("/edit_register_packages/:id", auth, upload.single('image'), async(r
             
             let due = parseFloat(total) - parseFloat(register_packages[0].paid_amount)
 
-            if (hidden_image == 0) {
+            if (!req.file) {
 
                 let query = `UPDATE tbl_register_packages SET date = '${fullDate}', agency = '${agency}', office_of_origin = '${office_of_origin}', customer = '${customer}', customer_address = '${customer_address}',
                 tracking_no = '${tracking_no}', supplier = '${supplier}', purchase_price = '${purchase_price}', shipping_mode = '${shipping_mode}', packaging = '${packaging}', courier_company = '${courier_company}',
@@ -1271,7 +1271,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
         let today = new Date();
         let newtime = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-        if (hidden_image == 0) {
+        if (!req.file) {
             
             let query = `INSERT INTO tbl_tracking_history (invoice, type, date, time, assign_driver, person_receives, delivery_status) VALUE 
             ('${packages_data[0].invoice}', 'register_packages', '${fullDate}', '${newtime}', '${assign_driver}', '${person_receives}', '6')`

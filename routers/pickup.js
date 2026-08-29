@@ -702,7 +702,7 @@ router.post("/edit_create_pickup/:id", auth, upload.single('image'), async(req, 
 
             const payment_methods_list = await mySqlQury(`SELECT * FROM tbl_payment_methods WHERE id = '${payment_methods}'`)
 
-            if (hidden_image == 0) {
+            if (!req.file) {
                 
                 if (pickup_data[0].payment_methods == '0') {
                 
@@ -1205,7 +1205,7 @@ router.post("/deliver_pickup/:id", auth, upload.single('image'), async(req, res)
         let today = new Date();
         let newtime = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-        if (hidden_image == 0) {
+        if (!req.file) {
             
             let query = `INSERT INTO tbl_tracking_history (invoice, type, date, time, assign_driver, person_receives, delivery_status) VALUE 
             ('${pickup_data[0].invoice}', 'pickup', '${fullDate}', '${newtime}', '${assign_driver}', '${person_receives}', '6')`

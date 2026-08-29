@@ -672,7 +672,7 @@ router.post("/edit_consolidated/:id", auth, upload.single('image'), async(req, r
 
             let due = parseFloat(total) - parseFloat(consolidated_data[0].paid_amount)
 
-            if (hidden_image == 0) {
+            if (!req.file) {
 
                 let query = `UPDATE tbl_consolidated SET date = '${fullDate}', stamps = '${stamps}', agency = '${agency}', office_of_origin = '${office_of_origin}', customer = '${customer}',
                 customer_address = '${customer_address}', client = '${client}', client_address = '${client_address}', shipping_mode = '${shipping_mode}', packaging = '${packaging}',
@@ -923,7 +923,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
         let today = new Date();
         let newtime = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-        if (hidden_image == 0) {
+        if (!req.file) {
             
             let query = `INSERT INTO tbl_tracking_history (invoice, type, date, time, assign_driver, address, delivery_status) VALUE 
             ('${consolidated_data[0].invoice}', 'consolidated', '${fullDate}', '${newtime}', '${assign_driver}', '${address}', '6')`

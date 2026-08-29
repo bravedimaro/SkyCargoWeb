@@ -882,7 +882,7 @@ router.post("/edit_create_shipment/:id", auth, upload.single('image'), async(req
 
             let due = parseFloat(total) - parseFloat(shipment_data[0].paid_amount)
 
-            if (hidden_image == 0) {
+            if (!req.file) {
 
                 if (payment_methods_list[0].payment_days == '0') {
 
@@ -1178,7 +1178,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
         let today = new Date();
         let newtime = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-        if (hidden_image == 0) {
+        if (!req.file) {
             
             let query = `INSERT INTO tbl_tracking_history (invoice, type, date, time, assign_driver, person_receives, delivery_status) VALUE 
             ('${shipment_data[0].invoice}', 'shipment', '${fullDate}', '${newtime}', '${assign_driver}', '${person_receives}', '6')`
