@@ -38,35 +38,44 @@ router.get("/general_settings", auth, async(req, res) => {
 
 router.post("/general_settings", auth, upload.single('site_logo'), async(req, res) => {
     try {
-       
-        const {site_title, site_currency, site_timezone, currency_placement, thousands_separator, site_logo_hidden, onesignal_app_id, onesignal_api_key, twilio_sid, twilio_auth_token, twilio_phone_no} = req.body 
-           
+        console.log('[general_settings] POST hit. req.file =', req.file ? { originalname: req.file.originalname, mimetype: req.file.mimetype, size: req.file.size } : 'undefined');
+
+        const {site_title, site_currency, site_timezone, currency_placement, thousands_separator, site_logo_hidden, onesignal_app_id, onesignal_api_key, twilio_sid, twilio_auth_token, twilio_phone_no} = req.body
+
         if (site_logo_hidden == 0) {
-            
+
             let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}',
-            thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}', 
+            thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}',
             twilio_phone_no = '${twilio_phone_no}' WHERE id = 1`
             await mySqlQury(query)
 
         } else {
-            const site_logo = await uploadToBlob(req.file)
+            if (!req.file) {
+                req.flash('errors', `No image file was received.`)
+                return res.redirect("/settings/general_settings")
+            }
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
-                return res.redirect("back")
+                return res.redirect("/settings/general_settings")
             }
 
-            let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_logo = '${site_logo}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}', 
-            thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}', 
+            const site_logo = await uploadToBlob(req.file)
+
+            let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_logo = '${site_logo}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}',
+            thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}',
             twilio_phone_no = '${twilio_phone_no}' WHERE id = 1`
             await mySqlQury(query)
         }
-        
+
         req.flash('success', `Added successfully`)
         res.redirect("/settings/general_settings")
-        
+
     } catch (error) {
+        console.log('[general_settings] ERROR:', error && error.message ? error.message : error);
         console.log(error);
+        req.flash('errors', `Upload failed: ${error && error.message ? error.message : 'unknown error'}`)
+        res.redirect("/settings/general_settings")
     }
 })
 
