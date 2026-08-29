@@ -36,6 +36,18 @@ setTimeout(function(){
             $(".js-programmatic-disable").on("click", function() {
                 $(".js-example-disabled").prop("disabled", true);
             });
+
+            // Generic initializer: style any plain <select> that wasn't already
+            // picked up by one of the class-specific initializers above.
+            $('select').not('.js-example-disabled-results, .js-example-basic-multiple, .js-example-placeholder-multiple, .js-example-basic-multiple-limit, .js-example-rtl, .js-example-basic-hide-search, .js-example-disabled').each(function() {
+                var $el = $(this);
+                if ($el.data('select2')) return;
+                var opts = { width: '100%' };
+                if (!$el.attr('multiple') && $el.find('option').length > 8) {
+                    opts.minimumResultsForSearch = Infinity;
+                }
+                $el.select2(opts);
+            });
         })(jQuery);
     }
     ,350);
