@@ -87,7 +87,7 @@
         <a href="#how">How it works</a>
         <a href="/tracking">Track</a>
         <% if (data.customer_login_enabled == 1) { %>
-          <a href="/platformcustomer">Customer Login</a>
+          <a href="/platformcustomer">Login</a>
           <a class="btn btn-primary" href="/sign_up">Get Started</a>
         <% } else { %>
           <a class="btn btn-primary" href="/tracking">Track Shipment</a>
@@ -179,8 +179,7 @@
       </a>
       <div class="foot-links">
         <a href="/tracking">Track</a>
-        <% if (data.customer_login_enabled == 1) { %><a href="/platformcustomer">Customer Login</a><% } %>
-        <a href="/platformAuth">Staff</a>
+        <% if (data.customer_login_enabled == 1) { %><a href="/platformcustomer">Login</a><% } %>
       </div>
       <div>© <%= new Date().getFullYear() %> <%= data.site_title %>. All rights reserved.</div>
     </div>
