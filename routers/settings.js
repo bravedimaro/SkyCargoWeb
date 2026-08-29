@@ -5,20 +5,10 @@ const {mySqlQury} = require('../middleware/db');
 const auth = require("../middleware/auth");
 const { query } = require("express");
 const multer  = require('multer');
+const { uploadToBlob, resolveAsset } = require('../middleware/blob');
 const access = require('../middleware/access');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log("1111111", file.originalname);  
-        cb(null, "./public/uploads")
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-
-    }
-})
-
-const upload = multer({storage : storage});
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 // ========== General Settings ========= //
 
@@ -59,7 +49,7 @@ router.post("/general_settings", auth, upload.single('site_logo'), async(req, re
             await mySqlQury(query)
 
         } else {
-            const site_logo = req.file.filename
+            const site_logo = await uploadToBlob(req.file)
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)

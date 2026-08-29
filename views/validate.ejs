@@ -8,8 +8,8 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   <meta name="author" content="">
-  <link rel="icon" href="/uploads/<%= data[0].site_logo %>" type="image/x-icon">
-  <link rel="shortcut icon" href="/uploads/<%= data[0].site_logo %>" type="image/x-icon">
+  <link rel="icon" href="<%= imgUrl(data[0].site_logo) %>" type="image/x-icon">
+  <link rel="shortcut icon" href="<%= imgUrl(data[0].site_logo) %>" type="image/x-icon">
   <title><%= data[0].site_title %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com/">
   <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -58,7 +58,7 @@
         <div class="col-xl-12 p-0">    
           <div class="login-card">
             <div>
-              <div><a class="logo" href="/"><img class="img-fluid for-light img-75 m-r-15" src="/uploads/<%= data[0].site_logo %>" alt="looginpage"><h1 class="f-24 f-w-900 font-dark pt-2 text-center"><%= data[0].site_title %></h1></a></div>
+              <div><a class="logo" href="/"><img class="img-fluid for-light img-75 m-r-15" src="<%= imgUrl(data[0].site_logo) %>" alt="looginpage"><h1 class="f-24 f-w-900 font-dark pt-2 text-center"><%= data[0].site_title %></h1></a></div>
 
               <div class="login-main"> 
                 <div class="theme-form" action="/" method="post" id="login_form">

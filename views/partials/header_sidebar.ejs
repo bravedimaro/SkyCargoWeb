@@ -15,7 +15,7 @@
     <div class="header-wrapper row m-0">
       <div class="header-logo-wrapper col-auto p-0">
         <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
-        <div class="logo-header-main"><a href="/index"><img class="img-fluid for-light img-100" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""><img class="img-fluid for-dark" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""></a></div>
+        <div class="logo-header-main"><a href="/index"><img class="img-fluid for-light img-100" src="<%= imgUrl(accessdata.data.site_logo) %>" alt=""><img class="img-fluid for-dark" src="<%= imgUrl(accessdata.data.site_logo) %>" alt=""></a></div>
       </div>
 
       <div class="left-header col horizontal-wrapper ps-0">
@@ -128,7 +128,7 @@
       <div>
         <div class="logo-wrapper p-1 px-4">
           <a href="/index">
-            <img class="img-fluid for-light img-50" src="../../uploads/<%= accessdata.data.site_logo %>" alt=""> 
+            <img class="img-fluid for-light img-50" src="<%= imgUrl(accessdata.data.site_logo) %>" alt=""> 
              <span class="f-18 f-w-700 text-white"><%= accessdata.data.site_title %></span>
           </a>
           <div class="back-btn"><i data-feather="grid"></i></div>

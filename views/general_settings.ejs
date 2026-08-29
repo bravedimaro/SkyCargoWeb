@@ -35,7 +35,7 @@
                       <form action="/settings/general_settings" method="post" class="needs-validation" enctype="multipart/form-data">
                         <div class="row g-3">
                             <div class="col-12 text-center">
-                                <img src="../uploads/<%= general_settings_data[0].site_logo %>" class="logo-abbr mx-2 b-r-10" width="130.5px" height="130.5px" alt="image">
+                                <img src="<%= imgUrl(general_settings_data[0].site_logo) %>" class="logo-abbr mx-2 b-r-10" width="130.5px" height="130.5px" alt="image">
                             </div>
 
                             <div class="col-6">

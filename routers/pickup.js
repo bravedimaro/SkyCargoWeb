@@ -3,6 +3,7 @@ const app = express();
 const router = express.Router();
 const auth = require("../middleware/auth");
 const multer  = require('multer');
+const { uploadToBlob, resolveAsset } = require('../middleware/blob');
 const access = require('../middleware/access');
 const { mySqlQury } = require("../middleware/db");
 const nodemailer = require('nodemailer');
@@ -10,18 +11,7 @@ const ejs = require('ejs');
 let sendNotification = require("../middleware/send");
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log("1111111", file.originalname);  
-        cb(null, "./public/uploads")
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-
-    }
-})
-
-const upload = multer({storage : storage});
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 
 router.get("/create_pickup", auth, async(req, res) => {
@@ -127,7 +117,7 @@ router.post("/create_pickup", auth, upload.single('image'), async(req, res) => {
                 add_declared_value, subtotal, discount, shipping_insurance, customs_duties, tax, declared_value, fixed_charge, reissue, total} = req.body
 
 
-            let image = req.file.filename
+            let image = await uploadToBlob(req.file)
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -243,7 +233,7 @@ router.post("/create_pickup", auth, upload.single('image'), async(req, res) => {
                 subject: 'Pickup',
                 attachments: [{
                     filename: 'Logo.png',
-                    path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                    path: resolveAsset(accessdata.data.site_logo),
                     cid: 'logo'
             }],
             html: data
@@ -339,7 +329,7 @@ router.post("/create_pickup", auth, upload.single('image'), async(req, res) => {
                 add_customs_duties, add_tax, tax_count, add_declared_value, subtotal, discount, shipping_insurance, customs_duties, tax, declared_value, fixed_charge, reissue, total} = req.body
 
 
-                let image = req.file.filename
+                let image = await uploadToBlob(req.file)
 
                 if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                     req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -454,7 +444,7 @@ router.post("/create_pickup", auth, upload.single('image'), async(req, res) => {
                 subject: 'Pickup',
                 attachments: [{
                     filename: 'Logo.png',
-                    path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                    path: resolveAsset(accessdata.data.site_logo),
                     cid: 'logo'
                }],
                html: data
@@ -764,7 +754,7 @@ router.post("/edit_create_pickup/:id", auth, upload.single('image'), async(req, 
                 }
 
             } else {
-                let image = req.file.filename
+                let image = await uploadToBlob(req.file)
 
                 if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                     req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -1097,7 +1087,7 @@ router.post("/pickup_tracking/:id", auth, async(req, res) => {
             subject: 'Pickup',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
@@ -1221,7 +1211,7 @@ router.post("/deliver_pickup/:id", auth, upload.single('image'), async(req, res)
             ('${pickup_data[0].invoice}', 'pickup', '${fullDate}', '${newtime}', '${assign_driver}', '${person_receives}', '6')`
             await mySqlQury(query)
         } else {
-            let image = req.file.filename
+            let image = await uploadToBlob(req.file)
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -1275,7 +1265,7 @@ router.post("/deliver_pickup/:id", auth, upload.single('image'), async(req, res)
              subject: 'Pickup',
              attachments: [{
                  filename: 'Logo.png',
-                 path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                 path: resolveAsset(accessdata.data.site_logo),
                  cid: 'logo'
             }],
             html: data

@@ -8,8 +8,8 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../uploads/<%= general_settings_data.site_logo %>" type="image/x-icon">
-  <link rel="shortcut icon" href="../../uploads/<%= general_settings_data.site_logo %>" type="image/x-icon">
+    <link rel="icon" href="<%= imgUrl(general_settings_data.site_logo) %>" type="image/x-icon">
+  <link rel="shortcut icon" href="<%= imgUrl(general_settings_data.site_logo) %>" type="image/x-icon">
   <title>Track Shipment</title>
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
@@ -48,7 +48,7 @@
                 <div id="tracking_page">
                     <div class="m-5 px-5">
                         <div class="p-3 text-center">
-                          <img src="../../uploads/<%= general_settings_data.site_logo %>" class="pt-3" alt="image">
+                          <img src="<%= imgUrl(general_settings_data.site_logo) %>" class="pt-3" alt="image">
                           <h1 class="f-w-900"><%= general_settings_data.site_title %></h1>
                             <h5>Track your shipment</h5>
                         </div>

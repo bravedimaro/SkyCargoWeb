@@ -3,6 +3,7 @@ const app = express();
 const router = express.Router();
 const auth = require("../middleware/auth");
 const multer  = require('multer');
+const { uploadToBlob, resolveAsset } = require('../middleware/blob');
 const access = require('../middleware/access');
 const { mySqlQury } = require("../middleware/db");
 const nodemailer = require('nodemailer');
@@ -10,18 +11,7 @@ const ejs = require('ejs');
 let sendNotification = require("../middleware/send");
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log("1111111", file.originalname);  
-        cb(null, "./public/uploads")
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-
-    }
-})
-
-const upload = multer({storage : storage});
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 // ========= list_of_consolidated ========== //
 
@@ -377,7 +367,7 @@ router.post("/add_consolidated", auth, upload.single('image'), async(req, res) =
             shipment_weight_vol, total_weight, total_weight_vol, add_price_kg, add_discount, add_value_assured, add_shipping_insurance, 
             add_customs_duties, add_tax, tax_count, subtotal, discount, shipping_insurance, customs_duties, tax, reissue, total} = req.body
 
-            let image = req.file.filename
+            let image = await uploadToBlob(req.file)
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -466,7 +456,7 @@ router.post("/add_consolidated", auth, upload.single('image'), async(req, res) =
             subject: 'Consolidated',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
@@ -694,7 +684,7 @@ router.post("/edit_consolidated/:id", auth, upload.single('image'), async(req, r
                 tax = '${tax}', reissue = '${reissue}', total = '${total}', due_amount = '${due}' WHERE id = '${req.params.id}'`
                 await mySqlQury(query)
             } else { 
-                let image = req.file.filename
+                let image = await uploadToBlob(req.file)
 
                 if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                     req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -814,7 +804,7 @@ router.post("/shipment_tracking/:id", auth, async(req, res) => {
             subject: 'Consolidated',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
@@ -939,7 +929,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
             ('${consolidated_data[0].invoice}', 'consolidated', '${fullDate}', '${newtime}', '${assign_driver}', '${address}', '6')`
             await mySqlQury(query)
         } else {
-            let image = req.file.filename
+            let image = await uploadToBlob(req.file)
 
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -985,7 +975,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
             subject: 'Consolidated',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data

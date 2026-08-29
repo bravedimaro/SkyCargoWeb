@@ -272,7 +272,7 @@
                         <div class="col-12">
                           <label class="btn btn-square btn-info mt-4 text-nowrap" id="add_product_image" for="file-1"><%= lang_data.Upload_Image %></label>
                           <div class="form-input">                                           
-                            <img id="file-preview" width="250px" height="250px" src="../../uploads/<%= shipment_data.image %>" alt="image">
+                            <img id="file-preview" width="250px" height="250px" src="<%= imgUrl(shipment_data.image) %>" alt="image">
                           
                             <input class="d-none" type="file" id="file-1" name="image" onchange="showPreview(event)">
                           </div>

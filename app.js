@@ -34,6 +34,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Resolve an image value for display: absolute URLs (Vercel Blob) pass through,
+// legacy bare filenames are served from /uploads.
+app.locals.imgUrl = (value) => {
+  if (!value) return '';
+  return /^https?:\/\//i.test(value) ? value : '/uploads/' + value;
+};
+
 app.use(flash());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

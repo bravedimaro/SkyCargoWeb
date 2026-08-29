@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 const { mySqlQury } = require("../middleware/db");
 const { route } = require("./users");
 const multer  = require('multer');
+const { uploadToBlob, resolveAsset } = require('../middleware/blob');
 const access = require('../middleware/access');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
@@ -12,17 +13,7 @@ let sendNotification = require("../middleware/send");
 
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./public/uploads")
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname)
-
-    }
-})
-
-const upload = multer({storage : storage});
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 
 router.get("/pre_alert", auth, async(req, res) => {
@@ -99,7 +90,7 @@ router.post("/add_pre_alert", auth, upload.single('image'), async(req, res) => {
         const accessdata = await access (req.user)
 
         const {date, courier_company, tracking, store_supplier, purchase_price, description} = req.body
-        const image = req.file.filename
+        const image = await uploadToBlob(req.file)
 
         let da = new Date(date)
         let day = da.getDate()
@@ -533,7 +524,7 @@ router.post("/register_packages", auth, upload.single('image'), async(req, res) 
             delivery_time, assign_driver, package_name, package_description, package_amount, weight, length, width, height, weight_vol, f_charge, decvalue, total_weight,
             total_weight_vol, total_decvalue, add_price_kg, add_discount, add_value_assured, 
             add_shipping_insurance, add_customs_duties, add_tax, tax_count, add_declared_value, subtotal, discount, shipping_insurance, customs_duties, tax, declared_value, fixed_charge, reissue, total } = req.body
-        const image = req.file.filename
+        const image = await uploadToBlob(req.file)
 
         if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
             req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
@@ -612,7 +603,7 @@ router.post("/register_packages", auth, upload.single('image'), async(req, res) 
             subject: 'Register Packages',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
@@ -1030,9 +1021,9 @@ router.post("/edit_register_packages/:id", auth, upload.single('image'), async(r
                 
                 await mySqlQury(query)
             } else {
-                let image = req.file.filename
+                let image = await uploadToBlob(req.file)
 
-                if (req.file.mimetype == "image/png" && req.file.mimetype == "image/jpg" && req.file.mimetype == "image/jpeg") {
+                if (req.file.mimetype == "image/png" || req.file.mimetype == "image/jpg" || req.file.mimetype == "image/jpeg") {
                     
                     let query = `UPDATE tbl_register_packages SET date = '${fullDate}', agency = '${agency}', office_of_origin = '${office_of_origin}', customer = '${customer}', customer_address = '${customer_address}',
                     tracking_no = '${tracking_no}', supplier = '${supplier}', purchase_price = '${purchase_price}', shipping_mode = '${shipping_mode}', packaging = '${packaging}', courier_company = '${courier_company}',
@@ -1163,7 +1154,7 @@ router.post("/shipment_tracking/:id", auth, async(req, res) => {
             subject: 'Register Packages',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
@@ -1286,7 +1277,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
             ('${packages_data[0].invoice}', 'register_packages', '${fullDate}', '${newtime}', '${assign_driver}', '${person_receives}', '6')`
             await mySqlQury(query)
         } else {
-            let image = req.file.filename
+            let image = await uploadToBlob(req.file)
             if (req.file.mimetype != "image/png" && req.file.mimetype != "image/jpg" && req.file.mimetype != "image/jpeg") {
                 req.flash('errors', `Only .png, .jpg and .jpeg format allowed!`)
                 return res.redirect("back")
@@ -1338,7 +1329,7 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
             subject: 'Register Packages',
             attachments: [{
                 filename: 'Logo.png',
-                path: __dirname + '/../public' +'/uploads/'+ accessdata.data.site_logo,
+                path: resolveAsset(accessdata.data.site_logo),
                 cid: 'logo'
            }],
            html: data
