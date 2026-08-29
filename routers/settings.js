@@ -41,12 +41,13 @@ router.post("/general_settings", auth, upload.single('site_logo'), async(req, re
         console.log('[general_settings] POST hit. req.file =', req.file ? { originalname: req.file.originalname, mimetype: req.file.mimetype, size: req.file.size } : 'undefined');
 
         const {site_title, site_currency, site_timezone, currency_placement, thousands_separator, site_logo_hidden, onesignal_app_id, onesignal_api_key, twilio_sid, twilio_auth_token, twilio_phone_no} = req.body
+        const customer_login_enabled = req.body.customer_login_enabled == 1 ? 1 : 0
 
         if (!req.file) {
 
             let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}',
             thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}',
-            twilio_phone_no = '${twilio_phone_no}' WHERE id = 1`
+            twilio_phone_no = '${twilio_phone_no}', customer_login_enabled = '${customer_login_enabled}' WHERE id = 1`
             await mySqlQury(query)
 
         } else {
@@ -59,7 +60,7 @@ router.post("/general_settings", auth, upload.single('site_logo'), async(req, re
 
             let query = `UPDATE tbl_general_settings SET site_title = '${site_title}', site_logo = '${site_logo}', site_currency = '${site_currency}', site_timezone = '${site_timezone}', currency_placement = '${currency_placement}',
             thousands_separator = '${thousands_separator}', onesignal_app_id = '${onesignal_app_id}', onesignal_api_key = '${onesignal_api_key}', twilio_sid = '${twilio_sid}', twilio_auth_token = '${twilio_auth_token}',
-            twilio_phone_no = '${twilio_phone_no}' WHERE id = 1`
+            twilio_phone_no = '${twilio_phone_no}', customer_login_enabled = '${customer_login_enabled}' WHERE id = 1`
             await mySqlQury(query)
         }
 

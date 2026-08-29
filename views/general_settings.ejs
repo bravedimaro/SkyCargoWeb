@@ -116,6 +116,21 @@
                               <input class="form-control" type="text" name="twilio_phone_no" value="SkyCargo_Private_Data" placeholder="Twilio Phone Number">
                             </div>
 
+                            <hr>
+
+                            <h5>Customer Portal</h5>
+
+                            <div class="col-12">
+                                <div class="d-flex mb-2 mt-2">
+                                    <div class="icon-state switch-outline">
+                                      <label class="switch">
+                                        <input type="checkbox" name="customer_login_enabled" value="1" <%= general_settings_data[0].customer_login_enabled == 1 ? 'checked' : '' %> ><span class="switch-state bg-success"></span>
+                                      </label>
+                                    </div>
+                                    <label class="col-form-label m-l-10">Enable customer login &amp; registration on the landing page</label>
+                                </div>
+                            </div>
+
                             <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Update_Profile %></button>
 
                         </div>

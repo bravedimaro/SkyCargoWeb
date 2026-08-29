@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — <%= data.site_title %></title>
+  <link rel="icon" href="<%= imgUrl(data.site_logo) %>" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{--brand:#1e3a8a;--brand2:#2563eb;--ink:#0f172a;--muted:#64748b}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Montserrat',sans-serif;color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f1f4b 0%,#1e3a8a 55%,#2563eb 100%);padding:24px}
+    a{text-decoration:none}
+    .wrap{width:100%;max-width:420px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;color:#dbe4ff}
+    .topbar a{color:#dbe4ff;font-weight:600;font-size:14px}
+    .topbar a:hover{color:#fff}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:#fff}
+    .brand img{height:38px;width:auto;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+    .card{background:#fff;border-radius:18px;padding:38px 34px;box-shadow:0 30px 60px -25px rgba(0,0,0,.5)}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:#e8efff;color:var(--brand);font-weight:700;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:18px}
+    h1{font-size:24px;font-weight:800;margin-bottom:6px}
+    .sub{color:var(--muted);font-size:15px;margin-bottom:26px}
+    label{display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:7px}
+    .field{margin-bottom:18px}
+    input{width:100%;padding:13px 15px;border:1.5px solid #dbe3f0;border-radius:10px;font-size:15px;font-family:inherit;transition:.2s}
+    input:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .btn{width:100%;padding:14px;border:0;border-radius:10px;background:var(--brand2);color:#fff;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;transition:.2s;margin-top:6px}
+    .btn:hover{background:var(--brand)}
+    .alert{padding:12px 14px;border-radius:10px;font-size:14px;margin-bottom:18px}
+    .alert-error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+    .alert-success{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+    .foot{text-align:center;color:#cdd8ff;font-size:13px;margin-top:18px}
+    .foot a{color:#fff;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <img src="<%= imgUrl(data.site_logo) %>" alt="<%= data.site_title %>">
+        <span><%= data.site_title %></span>
+      </a>
+      <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to site</a>
+    </div>
+
+    <div class="card">
+      <span class="badge"><i class="fa-solid fa-<%= icon %>"></i> <%= roleLabel %> Portal</span>
+      <h1>Sign in</h1>
+      <p class="sub">Enter your email &amp; password to continue.</p>
+
+      <% if (typeof errors !== 'undefined' && errors && errors.length) { %>
+        <div class="alert alert-error"><%= Array.isArray(errors) ? errors.join(', ') : errors %></div>
+      <% } %>
+      <% if (typeof success !== 'undefined' && success && success.length) { %>
+        <div class="alert alert-success"><%= Array.isArray(success) ? success.join(', ') : success %></div>
+      <% } %>
+
+      <form action="<%= action %>" method="post">
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
+      </form>
+    </div>
+
+    <p class="foot">Need help? <a href="/tracking">Track a shipment</a> or return to the <a href="/">home page</a>.</p>
+  </div>
+</body>
+</html>

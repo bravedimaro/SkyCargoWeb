@@ -17,13 +17,15 @@ var conn = mysql.createPool({
   });
 
 
-const mySqlQury =(qry)=>{
+const mySqlQury =(qry, params)=>{
     return new Promise((resolve, reject)=>{
-        conn.query(qry, (err, row)=>{
+        const cb = (err, row)=>{
             if (err) return reject(err);
             resolve(row)
-        })
-    }) 
+        }
+        if (params) conn.query(qry, params, cb);
+        else conn.query(qry, cb);
+    })
 }
 
   

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SkyCargo — integrated freight, shipping, courier and logistics platform.">
+  <link rel="icon" href="<%= imgUrl(data.site_logo) %>" type="image/x-icon">
+  <title><%= data.site_title %> — Freight, Shipping &amp; Logistics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{--brand:#1e3a8a;--brand2:#2563eb;--accent:#f59e0b;--ink:#0f172a;--muted:#64748b;--bg:#f8fafc;}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Montserrat',sans-serif;color:var(--ink);background:#fff;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:1140px;margin:0 auto;padding:0 24px}
+    /* nav */
+    header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid #eef2f7}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px;color:var(--brand)}
+    .brand img{height:42px;width:auto;object-fit:contain}
+    .nav-links{display:flex;align-items:center;gap:28px;font-weight:600;color:var(--muted)}
+    .nav-links a:hover{color:var(--brand)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;font-weight:700;transition:.2s;border:0;cursor:pointer}
+    .btn-primary{background:var(--brand2);color:#fff}
+    .btn-primary:hover{background:var(--brand)}
+    .btn-ghost{background:#fff;color:var(--brand);border:1.5px solid #dbe3f0}
+    .btn-ghost:hover{border-color:var(--brand2)}
+    .btn-accent{background:var(--accent);color:#1a1a1a}
+    .btn-accent:hover{filter:brightness(1.05)}
+    /* hero */
+    .hero{background:linear-gradient(135deg,#0f1f4b 0%,#1e3a8a 55%,#2563eb 100%);color:#fff;padding:96px 0 110px;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;background:radial-gradient(circle,rgba(245,158,11,.35),transparent 70%);}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative;z-index:2}
+    .eyebrow{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.4px}
+    .hero h1{font-size:46px;line-height:1.15;font-weight:800;margin:18px 0}
+    .hero p{font-size:18px;color:#dbe4ff;max-width:520px}
+    .hero-cta{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+    .hero-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:28px}
+    .hero-card h3{font-size:16px;color:#cdd8ff;margin-bottom:14px;font-weight:600}
+    .track-form{display:flex;gap:10px}
+    .track-form input{flex:1;padding:13px 16px;border-radius:10px;border:0;font-size:15px;font-family:inherit}
+    .hero-stats{display:flex;gap:30px;margin-top:26px}
+    .hero-stats b{font-size:26px;display:block}
+    .hero-stats span{font-size:13px;color:#cdd8ff}
+    /* sections */
+    section{padding:84px 0}
+    .sec-head{text-align:center;max-width:640px;margin:0 auto 54px}
+    .sec-head h2{font-size:34px;font-weight:800;color:var(--ink)}
+    .sec-head p{color:var(--muted);margin-top:12px;font-size:17px}
+    .features{background:var(--bg)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+    .card{background:#fff;border:1px solid #eef2f7;border-radius:16px;padding:30px;transition:.2s}
+    .card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -20px rgba(30,58,138,.35)}
+    .card .ico{width:54px;height:54px;border-radius:12px;background:#e8efff;color:var(--brand2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+    .card h3{font-size:19px;margin-bottom:8px}
+    .card p{color:var(--muted);font-size:15px}
+    /* steps */
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    .step{text-align:center;padding:0 8px}
+    .step .num{width:48px;height:48px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:18px}
+    .step h4{font-size:17px;margin-bottom:6px}
+    .step p{color:var(--muted);font-size:14px}
+    /* cta band */
+    .cta{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:22px;padding:54px;text-align:center}
+    .cta h2{font-size:30px;font-weight:800}
+    .cta p{color:#dbe4ff;margin:12px auto 26px;max-width:520px}
+    /* footer */
+    footer{background:#0b1530;color:#9fb0d0;padding:46px 0}
+    .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+    .foot .brand{color:#fff}
+    .foot a:hover{color:#fff}
+    .foot-links{display:flex;gap:22px;font-weight:600}
+    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.nav-links{display:none}.hero h1{font-size:34px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="/">
+        <img src="<%= imgUrl(data.site_logo) %>" alt="<%= data.site_title %>">
+        <span><%= data.site_title %></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Services</a>
+        <a href="#how">How it works</a>
+        <a href="/tracking">Track</a>
+        <% if (data.customer_login_enabled == 1) { %>
+          <a href="/platformcustomer">Customer Login</a>
+          <a class="btn btn-primary" href="/sign_up">Get Started</a>
+        <% } else { %>
+          <a class="btn btn-primary" href="/tracking">Track Shipment</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-plane-departure"></i> Freight · Shipping · Courier · Logistics</span>
+        <h1>Moving your cargo, <span style="color:var(--accent)">everywhere</span>, with total visibility.</h1>
+        <p><%= data.site_title %> is an integrated transportation platform for freight forwarding, courier services and logistics — book, track and manage every shipment from one place.</p>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="/tracking"><i class="fa-solid fa-box"></i> Track a Shipment</a>
+          <% if (data.customer_login_enabled == 1) { %>
+            <a class="btn btn-ghost" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.4)" href="/sign_up">Create an Account</a>
+          <% } %>
+        </div>
+        <div class="hero-stats">
+          <div><b>24/7</b><span>Shipment tracking</span></div>
+          <div><b>Global</b><span>Air, sea &amp; road</span></div>
+          <div><b>Real-time</b><span>Notifications</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>QUICK TRACKING</h3>
+        <form class="track-form" action="/tracking/ajax" method="post">
+          <input type="text" name="invoice_no" placeholder="Enter tracking / invoice no." required>
+          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+        <p style="color:#cdd8ff;font-size:13px;margin-top:14px">Enter your Airway Bill, Pickup or Consolidated reference to see live status.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="container">
+      <div class="sec-head">
+        <h2>One platform for every shipment</h2>
+        <p>Everything a modern freight and courier operation needs — from first booking to final delivery.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card"><div class="ico"><i class="fa-solid fa-ship"></i></div><h3>Freight &amp; Shipping</h3><p>Book air, sea and road shipments with automated rates, taxes and declared-value handling.</p></div>
+        <div class="card"><div class="ico"><i class="fa-solid fa-truck-fast"></i></div><h3>Courier &amp; Pickup</h3><p>Schedule pickups, assign drivers and manage consolidated deliveries from a single dashboard.</p></div>
+        <div class="card"><div class="ico"><i class="fa-solid fa-location-dot"></i></div><h3>Live Tracking</h3><p>Give customers real-time tracking history and status updates at every milestone.</p></div>
+        <div class="card"><div class="ico"><i class="fa-solid fa-file-invoice-dollar"></i></div><h3>Billing &amp; Payments</h3><p>Invoices, payment gateways and transaction records built into the workflow.</p></div>
+        <div class="card"><div class="ico"><i class="fa-solid fa-bell"></i></div><h3>Notifications</h3><p>Email, SMS and push alerts keep senders and recipients informed automatically.</p></div>
+        <div class="card"><div class="ico"><i class="fa-solid fa-chart-line"></i></div><h3>Reports &amp; Insights</h3><p>Track volumes, revenue and delivery performance across your whole operation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="container">
+      <div class="sec-head">
+        <h2>How it works</h2>
+        <p>Get a shipment moving in four simple steps.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><h4>Book</h4><p>Create a shipment or pickup request online in minutes.</p></div>
+        <div class="step"><div class="num">2</div><h4>Pickup</h4><p>We collect your cargo and assign the best route and carrier.</p></div>
+        <div class="step"><div class="num">3</div><h4>Track</h4><p>Follow every milestone with live status and notifications.</p></div>
+        <div class="step"><div class="num">4</div><h4>Deliver</h4><p>Proof of delivery captured and shared the moment it arrives.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="cta">
+        <h2>Ready to ship smarter?</h2>
+        <p>Join businesses that trust <%= data.site_title %> to move their freight, parcels and logistics operations.</p>
+        <% if (data.customer_login_enabled == 1) { %>
+          <a class="btn btn-accent" href="/sign_up">Create your account</a>
+        <% } else { %>
+          <a class="btn btn-accent" href="/tracking">Track a shipment</a>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container foot">
+      <a class="brand" href="/">
+        <img src="<%= imgUrl(data.site_logo) %>" alt="<%= data.site_title %>" style="height:34px">
+        <span><%= data.site_title %></span>
+      </a>
+      <div class="foot-links">
+        <a href="/tracking">Track</a>
+        <% if (data.customer_login_enabled == 1) { %><a href="/platformcustomer">Customer Login</a><% } %>
+        <a href="/platformAuth">Staff</a>
+      </div>
+      <div>© <%= new Date().getFullYear() %> <%= data.site_title %>. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>

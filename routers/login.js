@@ -12,97 +12,133 @@ const fs = require('fs')
 const countryCodes = require('country-codes-list')
 
 
-// =========== login ============= //
+// =========== helpers ============= //
+
+async function loadSettings() {
+    const rows = await mySqlQury(`SELECT * FROM tbl_general_settings`);
+    return rows[0];
+}
+
+async function customerLoginEnabled() {
+    const s = await loadSettings();
+    return !!s && (s.customer_login_enabled == 1 || s.customer_login_enabled === true);
+}
+
+const ROLE_PORTALS = {
+    admin:    { role: '1', action: '/platformAuth',     title: 'Admin Login',    roleLabel: 'Admin',    icon: 'user-shield' },
+    driver:   { role: '3', action: '/platformdriver',   title: 'Driver Login',   roleLabel: 'Driver',   icon: 'truck' },
+    customer: { role: '2', action: '/platformcustomer', title: 'Customer Login', roleLabel: 'Customer', icon: 'user' },
+};
+
+async function renderPortal(req, res, key) {
+    try {
+        const cfg = ROLE_PORTALS[key];
+        const data = await loadSettings();
+        res.render('platform_login', {
+            data, title: cfg.title, action: cfg.action, roleLabel: cfg.roleLabel, icon: cfg.icon,
+        });
+    } catch (error) {
+        console.log('[portal] error', error);
+        res.redirect('/');
+    }
+}
+
+async function doLogin(req, res, expectedRole, backUrl) {
+    try {
+        const { email, password } = req.body;
+
+        const data = await mySqlQury(`SELECT * FROM tbl_admin WHERE email = ?`, [email]);
+
+        if (!data[0]) {
+            req.flash('errors', `Invalid email or password`);
+            return res.redirect(backUrl);
+        }
+
+        const hash_pass = await bcrypt.compare(password, data[0].password);
+        if (!hash_pass) {
+            req.flash('errors', `Invalid email or password`);
+            return res.redirect(backUrl);
+        }
+
+        if (String(data[0].role) !== String(expectedRole)) {
+            req.flash('errors', `This account cannot sign in from here.`);
+            return res.redirect(backUrl);
+        }
+
+        if (expectedRole === '2') {
+            const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE email = ?`, [data[0].email]);
+            if (!customer_data[0] || customer_data[0].customer_active == '0') {
+                req.flash('errors', `Your account is waiting for approval.`);
+                return res.redirect(backUrl);
+            }
+        }
+
+        if (expectedRole === '3') {
+            const drivers_data = await mySqlQury(`SELECT * FROM tbl_drivers WHERE email = ?`, [data[0].email]);
+            if (!drivers_data[0] || drivers_data[0].active == '0') {
+                req.flash('errors', `Your account is waiting for approval.`);
+                return res.redirect(backUrl);
+            }
+        }
+
+        const token = jwt.sign({ id: data[0].id, name: data[0].first_name, email: data[0].email, role: data[0].role }, process.env.TOKEN_KEY);
+        res.cookie("jwt", token, { expires: new Date(Date.now() + 60000 * 60) });
+
+        const lang = req.cookies.lang;
+        if (lang == undefined) {
+            const lang_data = jwt.sign({ lang: 'en' }, process.env.TOKEN);
+            res.cookie("lang", lang_data);
+        }
+
+        req.flash('success', `login successfully`);
+        res.redirect("/index");
+    } catch (error) {
+        console.log('[login] error', error);
+        req.flash('errors', `Something went wrong. Please try again.`);
+        res.redirect(backUrl);
+    }
+}
+
+
+// =========== landing page ============= //
 
 router.get("/", async(req, res) => {
     try {
-        const accessdata = await access (req.user)
-
-        const data = await mySqlQury(`SELECT * FROM tbl_general_settings`)
-        console.log(data);
-
-        const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE customer_active = '1' ORDER BY id LIMIT 1`)
-        console.log(customer_data);
-        
-        res.render("login", {data, customer_data, accessdata})
+        const data = await loadSettings();
+        res.render("landing", { data });
     } catch (error) {
         console.log(error);
+        res.status(500).send("Server error");
     }
 })
+
+
+// =========== platform logins ============= //
+
+router.get("/platformAuth", (req, res) => renderPortal(req, res, 'admin'));
+router.get("/platformdriver", (req, res) => renderPortal(req, res, 'driver'));
+router.get("/platformcustomer", async(req, res) => {
+    if (!(await customerLoginEnabled())) return res.redirect("/");
+    renderPortal(req, res, 'customer');
+});
+
+router.post("/platformAuth", (req, res) => doLogin(req, res, '1', '/platformAuth'));
+router.post("/platformdriver", (req, res) => doLogin(req, res, '3', '/platformdriver'));
+router.post("/platformcustomer", async(req, res) => {
+    if (!(await customerLoginEnabled())) return res.redirect("/");
+    doLogin(req, res, '2', '/platformcustomer');
+});
+
 
 router.get("/validate", async(req, res) => {
     try {
         const accessdata = await access (req.user)
 
         const data = await mySqlQury(`SELECT * FROM tbl_general_settings`)
-        console.log(data);
 
         const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE customer_active = '1' ORDER BY id LIMIT 1`)
-        console.log(customer_data);
-        
+
         res.render("validate", {data, customer_data, accessdata})
-    } catch (error) {
-        console.log(error);
-    }
-})
-
-
-router.post("/", async(req, res) => {
-    try {
-        const {email, password} = req.body
-        
-        const query = "SELECT * FROM tbl_admin WHERE email='"+email+"'"
-
-        const data = await mySqlQury(query);
-        console.log("login data", data);
-        
-        if (!data[0]) {
-            
-            req.flash('errors', `your email is not register`)
-            return res.redirect("/")
-        }
-
-        const hash_pass = await bcrypt.compare(password, data[0].password)
-
-        if (!hash_pass){
-
-            req.flash('errors', `your password is wrong`)
-            return res.redirect("/")
-        }
-
-        if (data[0].role == '2') {
-            let customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE email = '${data[0].email}'`)
-            
-            if (customer_data[0].customer_active == '0') {
-                req.flash('errors', `waiting for approval.!`)
-                return res.redirect("/")
-            }
-        }
-
-        if (data[0].role == '3') {
-            let drivers_data = await mySqlQury(`SELECT * FROM tbl_drivers WHERE email = '${data[0].email}'`)
-
-            if (drivers_data[0].active == '0') {
-                req.flash('errors', `waiting for approval.!`)
-                return res.redirect("/")
-            }
-        }
-
-
-        const token = jwt.sign({id : data[0].id, name : data[0].first_name, email : data[0].email, role : data[0].role }, process.env.TOKEN_KEY)
-        console.log("login token", token);
-
-        res.cookie("jwt", token, {expires : new Date(Date.now() + 60000 * 60)})
-
-        const lang = req.cookies.lang
-
-        if (lang == undefined) {
-            const lang_data = jwt.sign({lang : 'en'}, process.env.TOKEN)
-            res.cookie("lang", lang_data)
-        }
-
-        req.flash('success', `login successfully`)
-        res.redirect("/index")
     } catch (error) {
         console.log(error);
     }
@@ -128,6 +164,8 @@ router.get("/lang/:id", async(req, res) => {
 
 router.get("/sign_up", async(req, res) => {
     try {
+        if (!(await customerLoginEnabled())) return res.redirect("/");
+
         const accessdata = await access (req.user)
 
         const data = await mySqlQury(`SELECT * FROM tbl_general_settings`)
@@ -173,6 +211,8 @@ router.get("/state/ajax/:id", async(req, res) => {
 
 router.post("/sign_up", async(req, res) => {
     try {
+        if (!(await customerLoginEnabled())) return res.redirect("/");
+
         const {first_name, last_name, email, country_code, phone_no, password, address, country, state, city, zip_code} = req.body
 
         const hash = await bcrypt.hash(password, 10)
