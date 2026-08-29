@@ -66,13 +66,27 @@
     .cta{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:22px;padding:54px;text-align:center}
     .cta h2{font-size:30px;font-weight:800}
     .cta p{color:#dbe4ff;margin:12px auto 26px;max-width:520px}
+    /* contact */
+    .contact-card{max-width:760px;margin:0 auto;background:#fff;border:1px solid #eef2f7;border-radius:18px;padding:36px;box-shadow:0 12px 30px -20px rgba(15,23,42,.18)}
+    .contact-form .row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .contact-form .field{margin-bottom:16px}
+    .contact-form label{display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px}
+    .contact-form input,.contact-form select,.contact-form textarea{width:100%;padding:12px 14px;border:1.5px solid #dbe3f0;border-radius:10px;font-size:15px;font-family:inherit;transition:.2s;background:#fff;color:var(--ink)}
+    .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--brand2);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+    .contact-form textarea{resize:vertical;min-height:120px}
+    .contact-form button[type=submit]{width:100%;justify-content:center}
+    .form-note{font-size:12px;color:var(--muted);margin-top:10px;text-align:center}
+    .form-msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px;text-align:center}
+    .form-msg.success{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+    .form-msg.error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+    .contact-form.sending{opacity:.6;pointer-events:none}
     /* footer */
     footer{background:#0b1530;color:#9fb0d0;padding:46px 0}
     .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
     .foot .brand{color:#fff}
     .foot a:hover{color:#fff}
     .foot-links{display:flex;gap:22px;font-weight:600}
-    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.nav-links{display:none}.hero h1{font-size:34px}}
+    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.contact-form .row-2{grid-template-columns:1fr}.nav-links{display:none}.hero h1{font-size:34px}}
   </style>
 </head>
 <body>
@@ -157,6 +171,57 @@
     </div>
   </section>
 
+  <section id="contact" class="features">
+    <div class="container">
+      <div class="sec-head">
+        <h2>Get in touch</h2>
+        <p>Questions about a shipment or pricing? Send us a note and our team will respond the same business day.</p>
+      </div>
+      <div class="contact-card">
+        <form class="contact-form" id="contactForm" novalidate>
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+          <div class="row-2">
+            <div class="field">
+              <label for="cf-name">Full name *</label>
+              <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+            </div>
+            <div class="field">
+              <label for="cf-email">Email *</label>
+              <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+            </div>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="cf-phone">Phone</label>
+              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional">
+            </div>
+            <div class="field">
+              <label for="cf-type">Shipment type</label>
+              <select id="cf-type" name="shipment_type">
+                <option value="">— Select (optional) —</option>
+                <option value="Register Packages">Register Packages</option>
+                <option value="Shipment">Shipment</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Consolidated">Consolidated</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="cf-tracking">Tracking ID</label>
+            <input id="cf-tracking" name="tracking_id" type="text" placeholder="Optional — e.g. AWB000015">
+          </div>
+          <div class="field">
+            <label for="cf-msg">Message *</label>
+            <textarea id="cf-msg" name="message" rows="5" required placeholder="How can we help?"></textarea>
+          </div>
+          <button class="btn btn-primary" id="contactSubmit" type="submit"><i class="fa-solid fa-paper-plane"></i> <span>Send message</span></button>
+          <p class="form-note">By submitting, you agree to be contacted about your enquiry. We never share your details.</p>
+          <div class="form-msg" id="contactMsg" hidden></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <section style="padding-top:0">
     <div class="container">
       <div class="cta">
@@ -184,5 +249,62 @@
       <div>© <%= new Date().getFullYear() %> <%= data.site_title %>. All rights reserved.</div>
     </div>
   </footer>
+
+  <script>
+    (function() {
+      var form = document.getElementById('contactForm');
+      if (!form) return;
+      var msg = document.getElementById('contactMsg');
+      var submit = document.getElementById('contactSubmit');
+
+      function show(text, ok) {
+        msg.textContent = text;
+        msg.className = 'form-msg ' + (ok ? 'success' : 'error');
+        msg.hidden = false;
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        msg.hidden = true;
+        form.classList.add('sending');
+        submit.disabled = true;
+        submit.querySelector('span').textContent = 'Sending…';
+
+        var fd = new FormData(form);
+        var payload = {
+          name: (fd.get('name') || '').toString().trim(),
+          email: (fd.get('email') || '').toString().trim(),
+          phone: (fd.get('phone') || '').toString().trim(),
+          shipment_type: (fd.get('shipment_type') || '').toString().trim(),
+          tracking_id: (fd.get('tracking_id') || '').toString().trim(),
+          message: (fd.get('message') || '').toString().trim(),
+          _honey: (fd.get('_honey') || '').toString()
+        };
+
+        fetch('/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(function(r) { return r.json().then(function(d){ return { ok: r.ok, data: d }; }); })
+        .then(function(res) {
+          if (res.ok && res.data.success) {
+            show(res.data.message || 'Your message has been sent.', true);
+            form.reset();
+          } else {
+            show(res.data.error || 'Could not send your message. Please try again.', false);
+          }
+        })
+        .catch(function() {
+          show('Network error. Please try again later.', false);
+        })
+        .finally(function() {
+          form.classList.remove('sending');
+          submit.disabled = false;
+          submit.querySelector('span').textContent = 'Send message';
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
