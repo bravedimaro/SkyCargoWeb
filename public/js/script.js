@@ -276,8 +276,11 @@ $(document).ready(function () {
 });
 
 function translate(tnum, index) {
+    if (typeof trans === 'undefined' || !Array.isArray(trans)) return;
     for(var i=1;i<=9;i++){
-        $('.lan-'+i).text(trans[i-1][tnum]);
+        if (trans[i-1] && trans[i-1][tnum] !== undefined) {
+            $('.lan-'+i).text(trans[i-1][tnum]);
+        }
     }
 }
 
