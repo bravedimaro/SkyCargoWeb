@@ -37,22 +37,22 @@
                             
                             <div class="col-6">
                                 <label class="form-label"><%= lang_data.Host %></label>
-                                <input class="form-control" type="text" name="email_host" value="SkyCargo_Private_Data" placeholder="Enter Host" required>
+                                <input class="form-control" type="text" name="email_host" value="<%= emails_data[0].email_host %>" placeholder="Enter Host" required>
                             </div>
-                            
+
                             <div class="col-6">
                                 <label class="form-label"><%= lang_data.Port %></label>
                                 <input class="form-control" type="number" name="email_port" value="<%= emails_data[0].email_port %>" placeholder="Enter Port" required>
                             </div>
-                            
+
                             <div class="col-6">
                                 <label class="form-label"><%= lang_data.EMail %></label>
-                                <input class="form-control" type="email" name="email_email" value="SkyCargo_Private_Data" placeholder="Enter E-Mail" required>
+                                <input class="form-control" type="email" name="email_email" value="<%= emails_data[0].email %>" placeholder="Enter E-Mail" required>
                             </div>
-                            
+
                             <div class="col-6">
                                 <label class="form-label"><%= lang_data.Password %></label>
-                                <input class="form-control" type="text" name="email_password" value="SkyCargo_Private_Data" placeholder="Enter Password" required>
+                                <input class="form-control" type="text" name="email_password" value="<%= emails_data[0].email_password %>" placeholder="Enter Password" required>
                             </div>
 
                             <button class="btn btn-pill btn-primary btn-air-primary mt-5" type="submit"><%= lang_data.Update %></button>
