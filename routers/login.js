@@ -225,20 +225,41 @@ router.post('/contact', async (req, res) => {
         const secure = port === 465;
         console.log(`[contact] SMTP: host=${es.email_host} port=${port} secure=${secure} user=${es.email} | admin recipient=${adminEmail}`);
 
-        const transporter = nodemailer.createTransport({
+        let transporter = nodemailer.createTransport({
             host: es.email_host,
             port,
             secure,
             auth: { user: es.email, pass: es.email_password },
         });
 
-        // Fail fast if SMTP credentials/connection are bad
+        // Fail fast if SMTP credentials/connection are bad.
+        // If 465 (implicit TLS) times out, fall back to 587 (STARTTLS) which Render permits.
         try {
             await transporter.verify();
             console.log('[contact] SMTP connection verified OK');
         } catch (verifyErr) {
-            console.log('[contact] SMTP verify FAILED:', verifyErr && verifyErr.message ? verifyErr.message : verifyErr);
-            return res.status(500).json({ error: 'Mail server connection failed. Please try again later.' });
+            const errMsg = verifyErr && verifyErr.message ? verifyErr.message : String(verifyErr);
+            console.log('[contact] SMTP verify FAILED on port ' + port + ':', errMsg);
+
+            if (port === 465) {
+                console.log('[contact] Retrying SMTP on port 587 (STARTTLS fallback)...');
+                transporter = nodemailer.createTransport({
+                    host: es.email_host,
+                    port: 587,
+                    secure: false,
+                    auth: { user: es.email, pass: es.email_password },
+                });
+                try {
+                    await transporter.verify();
+                    console.log('[contact] SMTP connection verified OK on port 587');
+                } catch (retryErr) {
+                    const retryMsg = retryErr && retryErr.message ? retryErr.message : String(retryErr);
+                    console.log('[contact] SMTP verify FAILED on port 587 too:', retryMsg);
+                    return res.status(500).json({ error: 'Mail server connection failed on both ports. Please try again later.' });
+                }
+            } else {
+                return res.status(500).json({ error: 'Mail server connection failed. Please try again later.' });
+            }
         }
 
         const submittedAt = new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
