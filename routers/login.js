@@ -262,7 +262,7 @@ router.post('/contact', async (req, res) => {
         return res.json({
             success: true,
             message: 'Your message has been sent. We will respond within one business day.',
-            guestEmailSent: guestSent,
+            guestEmailSent: guestResult,
         });
     } catch (error) {
         console.log('[contact] error', error);
