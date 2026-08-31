@@ -116,6 +116,37 @@ router.get("/", async(req, res) => {
 
 // =========== contact form ============= //
 
+// --- Anti-spam: in-memory rate-limit stores ---
+const contactIpHits = new Map();   // ip -> [timestamp, ...]
+const contactEmailHits = new Map(); // email -> [timestamp, ...]
+
+// Clean up entries older than 24 hours every 30 minutes
+setInterval(() => {
+    const cutoff = Date.now() - 86400000;
+    for (const [k, v] of contactIpHits)   { const f = v.filter(t => t > cutoff); f.length ? contactIpHits.set(k, f)   : contactIpHits.delete(k); }
+    for (const [k, v] of contactEmailHits) { const f = v.filter(t => t > cutoff); f.length ? contactEmailHits.set(k, f) : contactEmailHits.delete(k); }
+}, 1800000);
+
+function contactRateLimit(ip, email) {
+    const now = Date.now();
+    const oneHour = 3600000;
+    const oneDay  = 86400000;
+
+    // IP: max 5 per hour
+    const ipHits = (contactIpHits.get(ip) || []).filter(t => t > now - oneHour);
+    if (ipHits.length >= 5) return 'Too many submissions from your network. Please try again later.';
+    ipHits.push(now);
+    contactIpHits.set(ip, ipHits);
+
+    // Email: max 3 per day
+    const emailHits = (contactEmailHits.get(email) || []).filter(t => t > now - oneDay);
+    if (emailHits.length >= 3) return 'You have reached the daily submission limit. Please try again tomorrow.';
+    emailHits.push(now);
+    contactEmailHits.set(email, emailHits);
+
+    return null; // allowed
+}
+
 function escapeHtml(str) {
     return String(str || '')
         .replace(/&/g, '&amp;')
@@ -182,14 +213,24 @@ function contactOwnerEmail({ name, email, phone, shipment_type, tracking_id, mes
 
 router.post('/contact', async (req, res) => {
     try {
-        const { name, email, phone, shipment_type, tracking_id, message, _honey } = req.body || {};
+        const { name, email, phone, shipment_type, tracking_id, message, _honey, _ts } = req.body || {};
 
-        // Honeypot — bots fill the hidden field
-        if (_honey) return res.status(200).json({ success: true });
+        // --- Layer 1: Honeypot (bots fill the hidden field) ---
+        if (_honey) {
+            console.log('[contact] honeypot triggered from', req.ip);
+            return res.status(200).json({ success: true });
+        }
+
+        // --- Layer 2: Time-based throttle (bots submit in <2s) ---
+        const pageLoadTime = parseInt(_ts, 10);
+        if (pageLoadTime && (Date.now() - pageLoadTime) < 2000) {
+            console.log('[contact] speed-ban: form submitted in', Date.now() - pageLoadTime, 'ms from', req.ip);
+            return res.status(429).json({ error: 'Please wait a moment before submitting.' });
+        }
 
         const clean = {
             name: String(name || '').trim().slice(0, 200),
-            email: String(email || '').trim().slice(0, 200),
+            email: String(email || '').trim().slice(0, 200).toLowerCase(),
             phone: String(phone || '').trim().slice(0, 60) || '',
             shipment_type: String(shipment_type || '').trim().slice(0, 60) || '',
             tracking_id: String(tracking_id || '').trim().slice(0, 100) || '',
@@ -203,8 +244,40 @@ router.post('/contact', async (req, res) => {
             return res.status(400).json({ error: 'Please enter a valid email address.' });
         }
 
-        console.log('[contact] POST /contact hit');
-        console.log('[contact] payload:', { name: clean.name, email: clean.email, phone: clean.phone || null, shipment_type: clean.shipment_type || null, tracking_id: clean.tracking_id || null, message_length: clean.message.length, honeypot: !!_honey });
+        // --- Layer 3: Block disposable / known-spam email domains ---
+        const disposableDomains = new Set([
+            'mailinator.com','guerrillamail.com','tempmail.com','throwaway.email',
+            'yopmail.com','sharklasers.com','guerrillamailblock.com','grr.la',
+            'dispostable.com','temp-mail.org','fakeinbox.com','10minutemail.com',
+            'maildrop.cc','mohmal.com','getnada.com','emailondeck.com',
+            'discard.email','discardmail.com','tempail.com','tempr.email',
+        ]);
+        const emailDomain = clean.email.split('@')[1] || '';
+        if (disposableDomains.has(emailDomain)) {
+            console.log('[contact] disposable email blocked:', clean.email);
+            return res.status(400).json({ error: 'Please use a permanent email address.' });
+        }
+
+        // --- Layer 4: Rate limiting (IP + email) ---
+        const clientIp = req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : req.ip;
+        const rateErr = contactRateLimit(clientIp, clean.email);
+        if (rateErr) {
+            console.log('[contact] rate-limited:', rateErr, 'from', clientIp, clean.email);
+            return res.status(429).json({ error: rateErr });
+        }
+
+        // --- Layer 5: Basic content checks ---
+        const urlCount = (clean.message.match(/https?:\/\//gi) || []).length;
+        if (urlCount > 3) {
+            console.log('[contact] spammy URL count:', urlCount, 'from', clean.email);
+            return res.status(400).json({ error: 'Your message contains too many links.' });
+        }
+        if (clean.message === clean.message.toUpperCase() && clean.message.length > 20) {
+            return res.status(400).json({ error: 'Please write your message in normal case.' });
+        }
+
+        console.log('[contact] POST /contact hit from', clientIp);
+        console.log('[contact] payload:', { name: clean.name, email: clean.email, phone: clean.phone || null, shipment_type: clean.shipment_type || null, tracking_id: clean.tracking_id || null, message_length: clean.message.length });
 
         // --- Resend API config ---
         const apiKey = process.env.RESEND_API_KEY;

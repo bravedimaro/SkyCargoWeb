@@ -245,6 +245,7 @@
       <div class="contact-card">
         <form class="contact-form" id="contactForm" novalidate>
           <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="_ts" id="contactTs">
           <div class="row-2">
             <div class="field">
               <label for="cf-name">Full name *</label>
@@ -341,6 +342,8 @@
       if (!form) return;
       var msg = document.getElementById('contactMsg');
       var submit = document.getElementById('contactSubmit');
+      var tsField = document.getElementById('contactTs');
+      if (tsField) tsField.value = Date.now();
 
       function show(text, ok) {
         msg.textContent = text;
@@ -363,7 +366,8 @@
           shipment_type: (fd.get('shipment_type') || '').toString().trim(),
           tracking_id: (fd.get('tracking_id') || '').toString().trim(),
           message: (fd.get('message') || '').toString().trim(),
-          _honey: (fd.get('_honey') || '').toString()
+          _honey: (fd.get('_honey') || '').toString(),
+          _ts: parseInt(fd.get('_ts') || '0', 10)
         };
 
         fetch('/contact', {
