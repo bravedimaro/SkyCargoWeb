@@ -132,12 +132,12 @@ function contactEmailWrapper(title, body) {
 <tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5eaf3;">
 <tr><td style="background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:24px;text-align:center;color:#fff;">
-<h1 style="margin:0;font-size:20px;font-weight:700;letter-spacing:.3px;">SkyCargo</h1>
+<h1 style="margin:0;font-size:20px;font-weight:700;letter-spacing:.3px;">ExpressShipment</h1>
 <p style="margin:6px 0 0;font-size:12px;opacity:.85;letter-spacing:1px;">Freight · Shipping · Logistics</p>
 </td></tr>
 <tr><td style="padding:30px;">${body}</td></tr>
 <tr><td style="background:#0b1530;color:#9fb0d0;padding:18px;text-align:center;font-size:12px;">
-&copy; ${new Date().getFullYear()} SkyCargo. All rights reserved.
+&copy; ${new Date().getFullYear()} ExpressShipment. All rights reserved.
 </td></tr>
 </table></td></tr></table></body></html>`;
 }
@@ -146,7 +146,7 @@ function contactGuestEmail({ name, shipment_type, tracking_id, message }) {
     const body = `
         <h2 style="margin:0 0 14px;font-size:20px;color:#0f172a;">Thanks, ${escapeHtml(name)}!</h2>
         <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">
-            We've received your enquiry. A member of the SkyCargo team will get back to you within one business day.
+            We've received your enquiry. A member of the ExpressShipment team will get back to you within one business day.
         </p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0;border:1px solid #e5eaf3;border-radius:8px;background:#f8fafc;">
             <tr><td style="padding:14px 18px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#64748b;">Your submission</td></tr>
@@ -156,8 +156,8 @@ function contactGuestEmail({ name, shipment_type, tracking_id, message }) {
         </table>
         <p style="margin:16px 0 0;font-size:14px;color:#64748b;">If your matter is urgent, please reply to this email.</p>`;
     return {
-        subject: 'We received your message – SkyCargo',
-        html: contactEmailWrapper('Thanks for contacting SkyCargo', body),
+        subject: 'We received your message – ExpressShipment',
+        html: contactEmailWrapper('Thanks for contacting ExpressShipment', body),
     };
 }
 
@@ -173,7 +173,7 @@ function contactOwnerEmail({ name, email, phone, shipment_type, tracking_id, mes
             <tr><td style="padding:10px 14px;font-size:13px;color:#64748b;width:120px;border-bottom:1px solid #eef2f7;">Tracking ID</td><td style="padding:10px 14px;font-size:14px;color:#0f172a;border-bottom:1px solid #eef2f7;">${tracking_id ? escapeHtml(tracking_id) : '<span style="color:#94a3b8;">Not provided</span>'}</td></tr>
             <tr><td style="padding:10px 14px;font-size:13px;color:#64748b;width:120px;vertical-align:top;">Message</td><td style="padding:10px 14px;font-size:14px;color:#0f172a;line-height:1.6;">${escapeHtml(message)}</td></tr>
         </table>
-        <p style="margin:18px 0 0;"><a href="mailto:${escapeHtml(email)}?subject=Re:%20Your%20SkyCargo%20Enquiry" style="display:inline-block;background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:700;">Reply to ${escapeHtml((name||'').split(' ')[0] || 'enquirer')}</a></p>`;
+        <p style="margin:18px 0 0;"><a href="mailto:${escapeHtml(email)}?subject=Re:%20Your%20ExpressShipment%20Enquiry" style="display:inline-block;background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:700;">Reply to ${escapeHtml((name||'').split(' ')[0] || 'enquirer')}</a></p>`;
     return {
         subject: `New contact enquiry – ${name}${shipment_type ? ' ('+shipment_type+')' : ''}`,
         html: contactEmailWrapper('New contact enquiry', body),
@@ -208,7 +208,7 @@ router.post('/contact', async (req, res) => {
 
         // --- Resend API config ---
         const apiKey = process.env.RESEND_API_KEY;
-        const fromAddr = process.env.RESEND_FROM || 'SkyCargo <onboarding@resend.dev>';
+        const fromAddr = process.env.RESEND_FROM || 'ExpressShipment <onboarding@resend.dev>';
         if (!apiKey) {
             console.log('[contact] ERROR: RESEND_API_KEY is not set in the environment');
             return res.status(500).json({ error: 'Email service is not configured. Please try again later.' });
