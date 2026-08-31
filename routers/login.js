@@ -206,78 +206,56 @@ router.post('/contact', async (req, res) => {
         console.log('[contact] POST /contact hit');
         console.log('[contact] payload:', { name: clean.name, email: clean.email, phone: clean.phone || null, shipment_type: clean.shipment_type || null, tracking_id: clean.tracking_id || null, message_length: clean.message.length, honeypot: !!_honey });
 
-        const [emailSettingsRows, adminRows] = await Promise.all([
-            mySqlQury(`SELECT * FROM tbl_email_settings WHERE id = 1`),
-            mySqlQury(`SELECT email FROM tbl_admin WHERE role = '1' ORDER BY id LIMIT 1`),
-        ]);
-        const es = emailSettingsRows[0];
-        const adminEmail = adminRows[0] && adminRows[0].email;
-        if (!es || !es.email || !es.email_host) {
-            console.log('[contact] ERROR: SMTP settings missing (tbl_email_settings empty or host/email blank). Got:', es ? { host: es.email_host, port: es.email_port, email: es.email ? '(set)' : '(blank)' } : 'no row');
-            return res.status(500).json({ error: 'Contact form is not configured yet. Please email us directly.' });
+        // --- Resend API config ---
+        const apiKey = process.env.RESEND_API_KEY;
+        const fromAddr = process.env.RESEND_FROM || 'SkyCargo <onboarding@resend.dev>';
+        if (!apiKey) {
+            console.log('[contact] ERROR: RESEND_API_KEY is not set in the environment');
+            return res.status(500).json({ error: 'Email service is not configured. Please try again later.' });
         }
+        console.log(`[contact] Resend API: from=${fromAddr} | apiKey present (length=${apiKey.length})`);
+
+        const adminRows = await mySqlQury(`SELECT email FROM tbl_admin WHERE role = '1' ORDER BY id LIMIT 1`);
+        const adminEmail = adminRows[0] && adminRows[0].email;
         if (!adminEmail) {
             console.log('[contact] ERROR: no platform admin email found (tbl_admin role=1)');
             return res.status(500).json({ error: 'No platform admin email is configured.' });
         }
-
-        const port = parseInt(es.email_port, 10) || 465;
-        const secure = port === 465;
-        console.log(`[contact] SMTP: host=${es.email_host} port=${port} secure=${secure} user=${es.email} | admin recipient=${adminEmail}`);
-
-        let transporter = nodemailer.createTransport({
-            host: es.email_host,
-            port,
-            secure,
-            auth: { user: es.email, pass: es.email_password },
-        });
-
-        // Fail fast if SMTP credentials/connection are bad.
-        // If 465 (implicit TLS) times out, fall back to 587 (STARTTLS) which Render permits.
-        try {
-            await transporter.verify();
-            console.log('[contact] SMTP connection verified OK');
-        } catch (verifyErr) {
-            const errMsg = verifyErr && verifyErr.message ? verifyErr.message : String(verifyErr);
-            console.log('[contact] SMTP verify FAILED on port ' + port + ':', errMsg);
-
-            if (port === 465) {
-                console.log('[contact] Retrying SMTP on port 587 (STARTTLS fallback)...');
-                transporter = nodemailer.createTransport({
-                    host: es.email_host,
-                    port: 587,
-                    secure: false,
-                    auth: { user: es.email, pass: es.email_password },
-                });
-                try {
-                    await transporter.verify();
-                    console.log('[contact] SMTP connection verified OK on port 587');
-                } catch (retryErr) {
-                    const retryMsg = retryErr && retryErr.message ? retryErr.message : String(retryErr);
-                    console.log('[contact] SMTP verify FAILED on port 587 too:', retryMsg);
-                    return res.status(500).json({ error: 'Mail server connection failed on both ports. Please try again later.' });
-                }
-            } else {
-                return res.status(500).json({ error: 'Mail server connection failed. Please try again later.' });
-            }
-        }
+        console.log(`[contact] admin recipient=${adminEmail}`);
 
         const submittedAt = new Date().toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
         const guest = contactGuestEmail(clean);
         const owner = contactOwnerEmail({ ...clean, submittedAt });
 
-        const [guestSent, ownerSent] = await Promise.all([
-            transporter.sendMail({ from: `"${es.email}" <${es.email}>`, to: clean.email, subject: guest.subject, html: guest.html })
-                       .then(info => { console.log(`[contact] guest mail SENT -> to=${clean.email} messageId=${info && info.messageId ? info.messageId : 'n/a'}`); return true; })
-                       .catch(err => { console.log(`[contact] guest mail FAILED -> to=${clean.email}:`, err && err.message ? err.message : err); if (err && err.response) console.log('[contact] guest mail SMTP response:', err.response); return false; }),
-            transporter.sendMail({ from: `"${es.email}" <${es.email}>`, to: adminEmail, subject: owner.subject, html: owner.html, replyTo: clean.email })
-                       .then(info => { console.log(`[contact] owner mail SENT -> to=${adminEmail} replyTo=${clean.email} messageId=${info && info.messageId ? info.messageId : 'n/a'}`); return true; })
-                       .catch(err => { console.log(`[contact] owner mail FAILED -> to=${adminEmail}:`, err && err.message ? err.message : err); if (err && err.response) console.log('[contact] owner mail SMTP response:', err.response); return false; }),
+        // --- Send both emails via Resend HTTP API ---
+        async function sendResend({ to, subject, html, replyTo }) {
+            const body = { from: fromAddr, to: [to], subject, html };
+            if (replyTo) body.reply_to = replyTo;
+            const r = await fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
+            const json = await r.json().catch(() => ({}));
+            if (!r.ok) {
+                console.log(`[contact] Resend API error ${r.status}:`, JSON.stringify(json));
+                throw new Error(json.message || `HTTP ${r.status}`);
+            }
+            return json;
+        }
+
+        const [guestResult, ownerResult] = await Promise.all([
+            sendResend({ to: clean.email, subject: guest.subject, html: guest.html })
+                .then(j => { console.log(`[contact] guest mail SENT -> to=${clean.email} id=${j.id || 'n/a'}`); return true; })
+                .catch(err => { console.log(`[contact] guest mail FAILED -> to=${clean.email}: ${err.message}`); return false; }),
+            sendResend({ to: adminEmail, subject: owner.subject, html: owner.html, replyTo: clean.email })
+                .then(j => { console.log(`[contact] owner mail SENT -> to=${adminEmail} id=${j.id || 'n/a'}`); return true; })
+                .catch(err => { console.log(`[contact] owner mail FAILED -> to=${adminEmail}: ${err.message}`); return false; }),
         ]);
 
-        console.log(`[contact] summary: ownerSent=${ownerSent} guestSent=${guestSent}`);
+        console.log(`[contact] summary: ownerSent=${ownerResult} guestSent=${guestResult}`);
 
-        if (!ownerSent) {
+        if (!ownerResult) {
             return res.status(500).json({ error: 'We could not send your message. Please try again later.' });
         }
 
