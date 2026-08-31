@@ -198,11 +198,11 @@ router.get("/client_address/ajax/:id", auth, async(req, res) => {
         const client_data = await mySqlQury(`SELECT * FROM tbl_client WHERE id = '${req.params.id}'`)
         console.log(client_data);
 
-        const country = client_data[0].country.split(',');
-        const state = client_data[0].state.split(',');
-        const city = client_data[0].city.split(',');
-        const zipcode = client_data[0].zipcode.split(',');
-        const address = client_data[0].address.split(',');
+        const country = client_data[0] ? client_data[0].country.split(',') : [''];
+        const state = client_data[0] ? client_data[0].state.split(',') : [''];
+        const city = client_data[0] ? client_data[0].city.split(',') : [''];
+        const zipcode = client_data[0] ? client_data[0].zipcode.split(',') : [''];
+        const address = client_data[0] ? client_data[0].address.split(',') : [''];
         
         const countries_list = await mySqlQury("SELECT * FROM tbl_countries")
         const state_list = await mySqlQury("SELECT * FROM tbl_states")
@@ -222,11 +222,11 @@ router.post("/rate/ajax", auth, async(req, res) => {
         const customers_list = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${customer}'`)
         console.log(req.body);
 
-        const country = customers_list[0].customers_country.split(',');
-        const state = customers_list[0].customers_state.split(',');
-        const city = customers_list[0].customers_city.split(',');
-        const zipcode = customers_list[0].customers_zipcode.split(',');
-        const address = customers_list[0].customers_address.split(',');
+        const country = customers_list[0] ? customers_list[0].customers_country.split(',') : [''];
+        const state = customers_list[0] ? customers_list[0].customers_state.split(',') : [''];
+        const city = customers_list[0] ? customers_list[0].customers_city.split(',') : [''];
+        const zipcode = customers_list[0] ? customers_list[0].customers_zipcode.split(',') : [''];
+        const address = customers_list[0] ? customers_list[0].customers_address.split(',') : [''];
         
         address.forEach(async(data, i) => {
             if (customer_address == data) {
@@ -244,11 +244,11 @@ router.post("/rate/ajax", auth, async(req, res) => {
 
                 const client_list = await mySqlQury(`SELECT * FROM tbl_client WHERE id = '${client}'`)
 
-                const client_country = client_list[0].country.split(',');
-                const client_state = client_list[0].state.split(',');
-                const client_city = client_list[0].city.split(',');
-                const client_zipcode = client_list[0].zipcode.split(',');
-                const client_address_list = client_list[0].address.split(',');
+                const client_country = client_list[0] ? client_list[0].country.split(',') : [''];
+                const client_state = client_list[0] ? client_list[0].state.split(',') : [''];
+                const client_city = client_list[0] ? client_list[0].city.split(',') : [''];
+                const client_zipcode = client_list[0] ? client_list[0].zipcode.split(',') : [''];
+                const client_address_list = client_list[0] ? client_list[0].address.split(',') : [''];
 
                 client_address_list.forEach(async(data, i) => {
                     if (client_address == data) {
@@ -413,16 +413,16 @@ router.post("/create_shipment", auth, upload.single('image'), async(req, res) =>
         const page = 'shipment'
         const new_data = await mySqlQury(`SELECT * FROM tbl_shipment WHERE invoice = '${prefix}${invoice}'`)
         
-        const package_name_list = new_data[0].package_name.split(',')
-        const package_description_list = new_data[0].package_description.split(',')
-        const package_amount_list = new_data[0].package_amount.split(',')
-        const weight_list = new_data[0].weight.split(',')
-        const length_list = new_data[0].length.split(',')
-        const width_list = new_data[0].width.split(',')
-        const height_list = new_data[0].height.split(',')
-        const weight_vol_list = new_data[0].weight_vol.split(',')
-        const f_charge_list = new_data[0].f_charge.split(',')
-        const decvalue_list = new_data[0].decvalue.split(',')
+        const package_name_list = new_data[0] ? new_data[0].package_name.split(',') : ['']
+        const package_description_list = new_data[0] ? new_data[0].package_description.split(',') : ['']
+        const package_amount_list = new_data[0] ? new_data[0].package_amount.split(',') : ['']
+        const weight_list = new_data[0] ? new_data[0].weight.split(',') : ['']
+        const length_list = new_data[0] ? new_data[0].length.split(',') : ['']
+        const width_list = new_data[0] ? new_data[0].width.split(',') : ['']
+        const height_list = new_data[0] ? new_data[0].height.split(',') : ['']
+        const weight_vol_list = new_data[0] ? new_data[0].weight_vol.split(',') : ['']
+        const f_charge_list = new_data[0] ? new_data[0].f_charge.split(',') : ['']
+        const decvalue_list = new_data[0] ? new_data[0].decvalue.split(',') : ['']
             
         const email_data = await mySqlQury(`SELECT * FROM tbl_email_settings`)
         const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${customer}'`)
@@ -745,28 +745,28 @@ router.get("/show_create_shipment/:id", auth, async(req, res) => {
                                                                             FROM tbl_tracking_history WHERE invoice = '${shipment_list[0].invoice}' AND type = 'shipment'`)
         console.log(shipment_list);
 
-        const package_name_list = shipment_list[0].package_name.split(',')
-        const package_description_list = shipment_list[0].package_description.split(',')
-        const package_amount_list = shipment_list[0].package_amount.split(',')
-        const weight_list = shipment_list[0].weight.split(',')
-        const length_list = shipment_list[0].length.split(',')
-        const width_list = shipment_list[0].width.split(',')
-        const height_list = shipment_list[0].height.split(',')
-        const weight_vol_list = shipment_list[0].weight_vol.split(',')
-        const f_charge_list = shipment_list[0].f_charge.split(',')
-        const decvalue_list = shipment_list[0].decvalue.split(',')
+        const package_name_list = shipment_list[0] ? shipment_list[0].package_name.split(',') : ['']
+        const package_description_list = shipment_list[0] ? shipment_list[0].package_description.split(',') : ['']
+        const package_amount_list = shipment_list[0] ? shipment_list[0].package_amount.split(',') : ['']
+        const weight_list = shipment_list[0] ? shipment_list[0].weight.split(',') : ['']
+        const length_list = shipment_list[0] ? shipment_list[0].length.split(',') : ['']
+        const width_list = shipment_list[0] ? shipment_list[0].width.split(',') : ['']
+        const height_list = shipment_list[0] ? shipment_list[0].height.split(',') : ['']
+        const weight_vol_list = shipment_list[0] ? shipment_list[0].weight_vol.split(',') : ['']
+        const f_charge_list = shipment_list[0] ? shipment_list[0].f_charge.split(',') : ['']
+        const decvalue_list = shipment_list[0] ? shipment_list[0].decvalue.split(',') : ['']
 
         const sender_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${shipment_list[0].customer}'`)
 
-        const customers_address = sender_data[0].customers_address.split(',')
-        const customers_country = sender_data[0].customers_country.split(',')
-        const customers_city = sender_data[0].customers_city.split(',')
+        const customers_address = sender_data[0] ? sender_data[0].customers_address.split(',') : ['']
+        const customers_country = sender_data[0] ? sender_data[0].customers_country.split(',') : ['']
+        const customers_city = sender_data[0] ? sender_data[0].customers_city.split(',') : ['']
         
         const recipient_data = await mySqlQury(`SELECT * FROM tbl_client WHERE id = '${shipment_list[0].client}'`)
 
-        const recipient_address = recipient_data[0].address.split(',')
-        const recipient_country = recipient_data[0].country.split(',')
-        const recipient_city = recipient_data[0].city.split(',')
+        const recipient_address = recipient_data[0] ? recipient_data[0].address.split(',') : ['']
+        const recipient_country = recipient_data[0] ? recipient_data[0].country.split(',') : ['']
+        const recipient_city = recipient_data[0] ? recipient_data[0].city.split(',') : ['']
 
         const country_name = await mySqlQury(`SELECT * FROM tbl_countries`)
         const city_name = await mySqlQury(`SELECT * FROM tbl_city`)
@@ -810,21 +810,21 @@ router.get("/edit_create_shipment/:id", auth, async(req, res) => {
         const office_group_list = await mySqlQury(`SELECT * FROM tbl_office_group`)
         const customers_list = await mySqlQury(`SELECT * FROM tbl_customers WHERE customer_active = 1`)
         const edit_customers_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${shipment_data[0].customer}'`)
-        const country = edit_customers_data[0].customers_country.split(',');
-        const state = edit_customers_data[0].customers_state.split(',');
-        const city = edit_customers_data[0].customers_city.split(',');
-        const zipcode = edit_customers_data[0].customers_zipcode.split(',');
-        const address = edit_customers_data[0].customers_address.split(',');
+        const country = edit_customers_data[0] ? edit_customers_data[0].customers_country.split(',') : [''];
+        const state = edit_customers_data[0] ? edit_customers_data[0].customers_state.split(',') : [''];
+        const city = edit_customers_data[0] ? edit_customers_data[0].customers_city.split(',') : [''];
+        const zipcode = edit_customers_data[0] ? edit_customers_data[0].customers_zipcode.split(',') : [''];
+        const address = edit_customers_data[0] ? edit_customers_data[0].customers_address.split(',') : [''];
         const countries_list = await mySqlQury("SELECT * FROM tbl_countries")
         const state_list = await mySqlQury("SELECT * FROM tbl_states")
         const city_list = await mySqlQury("SELECT * FROM tbl_city")
         const client_list = await mySqlQury(`SELECT * FROM tbl_client WHERE customer = '${shipment_data[0].customer}'`)
         const edit_client_data = await mySqlQury(`SELECT * FROM tbl_client WHERE id = '${shipment_data[0].client}'`)
-        const client_country = edit_client_data[0].country.split(',');
-        const client_state = edit_client_data[0].state.split(',');
-        const client_city = edit_client_data[0].city.split(',');
-        const client_zipcode = edit_client_data[0].zipcode.split(',');
-        const client_address = edit_client_data[0].address.split(',');
+        const client_country = edit_client_data[0] ? edit_client_data[0].country.split(',') : [''];
+        const client_state = edit_client_data[0] ? edit_client_data[0].state.split(',') : [''];
+        const client_city = edit_client_data[0] ? edit_client_data[0].city.split(',') : [''];
+        const client_zipcode = edit_client_data[0] ? edit_client_data[0].zipcode.split(',') : [''];
+        const client_address = edit_client_data[0] ? edit_client_data[0].address.split(',') : [''];
         const logistics_service_list = await mySqlQury(`SELECT * FROM tbl_logistics_service`)
         const packaging_list = await mySqlQury("SELECT * FROM tbl_packaging")
         const courier_companies_list = await mySqlQury(`SELECT * FROM tbl_courier_companies`)
@@ -836,16 +836,16 @@ router.get("/edit_create_shipment/:id", auth, async(req, res) => {
         const shipping_status_data = await mySqlQury(`SELECT * FROM tbl_shipping_status WHERE status_checkbox = '1'`)
         const taxe_data = await mySqlQury(`SELECT * FROM tbl_taxes`)
 
-        const package_name_list = shipment_data[0].package_name.split(',')
-        const package_description_list = shipment_data[0].package_description.split(',')
-        const package_amount_list = shipment_data[0].package_amount.split(',')
-        const weight_list = shipment_data[0].weight.split(',')
-        const length_list = shipment_data[0].length.split(',')
-        const width_list = shipment_data[0].width.split(',')
-        const height_list = shipment_data[0].height.split(',')
-        const weight_vol_list = shipment_data[0].weight_vol.split(',')
-        const f_charge_list = shipment_data[0].f_charge.split(',')
-        const decvalue_list = shipment_data[0].decvalue.split(',')
+        const package_name_list = shipment_data[0] ? shipment_data[0].package_name.split(',') : ['']
+        const package_description_list = shipment_data[0] ? shipment_data[0].package_description.split(',') : ['']
+        const package_amount_list = shipment_data[0] ? shipment_data[0].package_amount.split(',') : ['']
+        const weight_list = shipment_data[0] ? shipment_data[0].weight.split(',') : ['']
+        const length_list = shipment_data[0] ? shipment_data[0].length.split(',') : ['']
+        const width_list = shipment_data[0] ? shipment_data[0].width.split(',') : ['']
+        const height_list = shipment_data[0] ? shipment_data[0].height.split(',') : ['']
+        const weight_vol_list = shipment_data[0] ? shipment_data[0].weight_vol.split(',') : ['']
+        const f_charge_list = shipment_data[0] ? shipment_data[0].f_charge.split(',') : ['']
+        const decvalue_list = shipment_data[0] ? shipment_data[0].decvalue.split(',') : ['']
         
         res.render("edit_create_shipment", {
             role_data : role_data, accessdata, lang_data, language_name, notification_data,
@@ -1025,16 +1025,16 @@ router.post("/shipment_tracking/:id", auth, async(req, res) => {
 
         const page = 'shipment_status'
         
-        const package_name_list = shipment_data[0].package_name.split(',')
-        const package_description_list = shipment_data[0].package_description.split(',')
-        const package_amount_list = shipment_data[0].package_amount.split(',')
-        const weight_list = shipment_data[0].weight.split(',')
-        const length_list = shipment_data[0].length.split(',')
-        const width_list = shipment_data[0].width.split(',')
-        const height_list = shipment_data[0].height.split(',')
-        const weight_vol_list = shipment_data[0].weight_vol.split(',')
-        const f_charge_list = shipment_data[0].f_charge.split(',')
-        const decvalue_list = shipment_data[0].decvalue.split(',')
+        const package_name_list = shipment_data[0] ? shipment_data[0].package_name.split(',') : ['']
+        const package_description_list = shipment_data[0] ? shipment_data[0].package_description.split(',') : ['']
+        const package_amount_list = shipment_data[0] ? shipment_data[0].package_amount.split(',') : ['']
+        const weight_list = shipment_data[0] ? shipment_data[0].weight.split(',') : ['']
+        const length_list = shipment_data[0] ? shipment_data[0].length.split(',') : ['']
+        const width_list = shipment_data[0] ? shipment_data[0].width.split(',') : ['']
+        const height_list = shipment_data[0] ? shipment_data[0].height.split(',') : ['']
+        const weight_vol_list = shipment_data[0] ? shipment_data[0].weight_vol.split(',') : ['']
+        const f_charge_list = shipment_data[0] ? shipment_data[0].f_charge.split(',') : ['']
+        const decvalue_list = shipment_data[0] ? shipment_data[0].decvalue.split(',') : ['']
             
         const email_data = await mySqlQury(`SELECT * FROM tbl_email_settings`)
         const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${shipment_data[0].customer}'`)
@@ -1204,16 +1204,16 @@ router.post("/deliver_shipment/:id", auth, upload.single('image'), async(req, re
 
         const page = 'shipment_status'
         
-        const package_name_list = shipment_data[0].package_name.split(',')
-        const package_description_list = shipment_data[0].package_description.split(',')
-        const package_amount_list = shipment_data[0].package_amount.split(',')
-        const weight_list = shipment_data[0].weight.split(',')
-        const length_list = shipment_data[0].length.split(',')
-        const width_list = shipment_data[0].width.split(',')
-        const height_list = shipment_data[0].height.split(',')
-        const weight_vol_list = shipment_data[0].weight_vol.split(',')
-        const f_charge_list = shipment_data[0].f_charge.split(',')
-        const decvalue_list = shipment_data[0].decvalue.split(',')
+        const package_name_list = shipment_data[0] ? shipment_data[0].package_name.split(',') : ['']
+        const package_description_list = shipment_data[0] ? shipment_data[0].package_description.split(',') : ['']
+        const package_amount_list = shipment_data[0] ? shipment_data[0].package_amount.split(',') : ['']
+        const weight_list = shipment_data[0] ? shipment_data[0].weight.split(',') : ['']
+        const length_list = shipment_data[0] ? shipment_data[0].length.split(',') : ['']
+        const width_list = shipment_data[0] ? shipment_data[0].width.split(',') : ['']
+        const height_list = shipment_data[0] ? shipment_data[0].height.split(',') : ['']
+        const weight_vol_list = shipment_data[0] ? shipment_data[0].weight_vol.split(',') : ['']
+        const f_charge_list = shipment_data[0] ? shipment_data[0].f_charge.split(',') : ['']
+        const decvalue_list = shipment_data[0] ? shipment_data[0].decvalue.split(',') : ['']
             
         const email_data = await mySqlQury(`SELECT * FROM tbl_email_settings`)
         const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${shipment_data[0].customer}'`)
@@ -1414,23 +1414,23 @@ router.get("/print_shipment/:id", auth, async(req, res) => {
         const customer_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${register_packages_data[0].customer}'`)
         console.log(register_packages_data);
 
-        const address = customer_data[0].customers_address.split(',')
-        const country = customer_data[0].customers_country.split(',')
-        const city = customer_data[0].customers_city.split(',')
+        const address = customer_data[0] ? customer_data[0].customers_address.split(',') : ['']
+        const country = customer_data[0] ? customer_data[0].customers_country.split(',') : ['']
+        const city = customer_data[0] ? customer_data[0].customers_city.split(',') : ['']
         
         const country_name = await mySqlQury(`SELECT * FROM tbl_countries`)
         const city_name = await mySqlQury(`SELECT * FROM tbl_city`)
 
-        const package_name_list = register_packages_data[0].package_name.split(',')
-        const package_description_list = register_packages_data[0].package_description.split(',')
-        const package_amount_list = register_packages_data[0].package_amount.split(',')
-        const weight_list = register_packages_data[0].weight.split(',')
-        const length_list = register_packages_data[0].length.split(',')
-        const width_list = register_packages_data[0].width.split(',')
-        const height_list = register_packages_data[0].height.split(',')
-        const weight_vol_list = register_packages_data[0].weight_vol.split(',')
-        const f_charge_list = register_packages_data[0].f_charge.split(',')
-        const decvalue_list = register_packages_data[0].decvalue.split(',')
+        const package_name_list = register_packages_data[0] ? register_packages_data[0].package_name.split(',') : ['']
+        const package_description_list = register_packages_data[0] ? register_packages_data[0].package_description.split(',') : ['']
+        const package_amount_list = register_packages_data[0] ? register_packages_data[0].package_amount.split(',') : ['']
+        const weight_list = register_packages_data[0] ? register_packages_data[0].weight.split(',') : ['']
+        const length_list = register_packages_data[0] ? register_packages_data[0].length.split(',') : ['']
+        const width_list = register_packages_data[0] ? register_packages_data[0].width.split(',') : ['']
+        const height_list = register_packages_data[0] ? register_packages_data[0].height.split(',') : ['']
+        const weight_vol_list = register_packages_data[0] ? register_packages_data[0].weight_vol.split(',') : ['']
+        const f_charge_list = register_packages_data[0] ? register_packages_data[0].f_charge.split(',') : ['']
+        const decvalue_list = register_packages_data[0] ? register_packages_data[0].decvalue.split(',') : ['']
         
         res.render("print_shipment", {
             role_data : role_data, accessdata, lang_data, language_name, notification_data,
@@ -1461,17 +1461,17 @@ router.get("/print_label/:id", auth, async(req, res) => {
         console.log(data);
         const cus_data = await mySqlQury(`SELECT * FROM tbl_customers WHERE id = '${data[0].customer}'`)
 
-        const cus_country = cus_data[0].customers_country.split(',')
-        const cus_state = cus_data[0].customers_state.split(',')
-        const cus_city = cus_data[0].customers_city.split(',')
-        const cus_zipcode = cus_data[0].customers_zipcode.split(',')
-        const cus_address = cus_data[0].customers_address.split(',')
+        const cus_country = cus_data[0] ? cus_data[0].customers_country.split(',') : ['']
+        const cus_state = cus_data[0] ? cus_data[0].customers_state.split(',') : ['']
+        const cus_city = cus_data[0] ? cus_data[0].customers_city.split(',') : ['']
+        const cus_zipcode = cus_data[0] ? cus_data[0].customers_zipcode.split(',') : ['']
+        const cus_address = cus_data[0] ? cus_data[0].customers_address.split(',') : ['']
 
-        const weight_data = data[0].weight.split(',')
-        const length_data = data[0].length.split(',')
-        const width_data = data[0].width.split(',')
-        const height_data = data[0].height.split(',')
-        const weight_vol_data = data[0].weight_vol.split(',')
+        const weight_data = data[0] ? data[0].weight.split(',') : ['']
+        const length_data = data[0] ? data[0].length.split(',') : ['']
+        const width_data = data[0] ? data[0].width.split(',') : ['']
+        const height_data = data[0] ? data[0].height.split(',') : ['']
+        const weight_vol_data = data[0] ? data[0].weight_vol.split(',') : ['']
 
         let weight = 0
         let length = 0
